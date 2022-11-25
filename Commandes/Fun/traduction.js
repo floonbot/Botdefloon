@@ -36,20 +36,25 @@ module.exports = {
       await message.deferReply()
 
       if(langue === "fr") {
-      const translated = await translate(query, { to: 'en' });
+      const translated = await translate(query, { to: 'fr' });
      return message.followUp(`${translated.text}`)
       }
 
-      if(langue === "en") {
-        const translated = await translate(query, { to: 'fr' });
-      return  message.followUp(`${translated.text}`)
-      }
+      if(langue === "ja") {
+        const translated = await translate(query, { to: 'ja' });
+       return message.followUp(`${translated.text}`)
+        }
 
-      if (langue !== "fr" || langue !== "en") {
+        if(langue === "en") {
+          const translated = await translate(query, { to: 'en' });
+         return message.followUp(`${translated.text}`)
+          }
+
+      if (langue !== "fr" || langue !== "en" || langue !== "ja") {
         let mauvais = new Discord.EmbedBuilder()
           .setTitle(`👅 **__Les langues dispo__** 👅`)
           .setColor("#000000")
-          .setDescription("Les choix des langues dispo sont : \n\n \`fr\`\n \`en\`")
+          .setDescription("Les choix des langues dispo sont : \n\n \`fr\`\n \`en\`\n \`ja\`")
           .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
           .setTimestamp()
           .setFooter({ text: "traduction" })

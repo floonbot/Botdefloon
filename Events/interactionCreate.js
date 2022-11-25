@@ -53,7 +53,7 @@ module.exports = async (bot, interaction) => {
         const focusedOption = interaction.options.getFocused(true);
 
         if (focusedOption.name === 'langue') {
-          choices = ['fr', 'en']
+          choices = ['fr', 'en', 'ja']
         } 
 
         let sortie = choices.filter(c => c.includes(entry))
@@ -83,7 +83,7 @@ module.exports = async (bot, interaction) => {
 
       if (interaction.commandName === "nsfw") {
 
-        let choices = ["pussy", "aHarem"]
+        let choices = ["pussy", "aHarem", "boobs"]
         let sortie = choices.filter(c => c.includes(entry))
         await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
       }

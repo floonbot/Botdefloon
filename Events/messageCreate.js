@@ -195,6 +195,8 @@ module.exports = async (bot, message) => {
         try { await message.member.send({ content: `Le lien/mot ${message.content} est interdits dans le serveur ${message.guild.name}, sauf si tu as la permissions ManageChannels` }) } catch (err) { }
         return await message.channel.send({ content: `${message.author}, Vous n'avez pas le droit de posté ce genre de lien !! Sauf si vous avez la permission MenageChannels` }).then((msg) => {
           setTimeout(() => msg.delete(), 10000)
+
+        console.log(`${message.content}`)
         })
       }
 
