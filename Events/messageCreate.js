@@ -35,6 +35,33 @@ module.exports = async (bot, message) => {
     }
   })
 
+  db.query(`SELECT * FROM pub WHERE guild = '${message.guild.id}'`, async (err, req) => {
+
+    try {
+
+      if (req.length < 1) {
+
+        db.query(`INSERT INTO pub (guild, active) VALUES (${message.guild.id}, 'false')`)
+      }
+
+    } catch (err) {
+      console.log(`
+      >------------ OUPS UNE ERREUR ------------<
+      
+      UNE ERREUR DANS L'EVENT MESSAGECREATE PUB !!
+
+      >--------------- L'ERREUR ----------------<
+
+      ${err}
+      
+      >-----------------------------------------<
+      `)
+      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
+      let channel = await bot.channels.cache.get("1041816985920610354")
+      channel.send({ content: `⚠️  UNE ERREUR DANS L'EVENT MESSAGECREATE PUB !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
+    }
+  })  
+
   db.query(`SELECT * FROM suggests WHERE guildId = '${message.guild.id}'`, async (err, req) => {
 
     try {
@@ -151,6 +178,8 @@ module.exports = async (bot, message) => {
       }
     }
   })
+
+  
 
   //Antilien
   try {

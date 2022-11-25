@@ -17,7 +17,7 @@ module.exports = {
     }
   ],
 
-  async run(message, args) {
+  async run(bot, message, args) {
 
     try {
 

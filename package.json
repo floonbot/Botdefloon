@@ -1,9 +1,12 @@
 {
   "dependencies": {
+    "@iamtraction/google-translate": "^2.0.1",
     "axios": "^1.2.0",
     "canvas": "^2.10.2",
     "discord-canvas-easy": "^3.2.0",
+    "discord-paginator.js": "^1.0.2",
     "discord.js": "^14.6.0",
+    "fortnite-api-io": "^1.9.0",
     "fs": "^0.0.1-security",
     "init": "^0.1.2",
     "libquery": "^1.0.2",
