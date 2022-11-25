@@ -6,6 +6,7 @@
     "discord-canvas-easy": "^3.2.0",
     "discord-paginator.js": "^1.0.2",
     "discord.js": "^14.6.0",
+    "figlet": "^1.5.2",
     "fortnite-api-io": "^1.9.0",
     "fs": "^0.0.1-security",
     "init": "^0.1.2",
