@@ -113,6 +113,7 @@ module.exports = async (bot, interaction) => {
     }
   }
 
+
   if (interaction.type === Discord.InteractionType.ApplicationCommand) {
 
     try {

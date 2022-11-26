@@ -1,8 +1,8 @@
 const { EmbedBuilder, ApplicationCommandOptionType, AttachmentBuilder, PermissionsBitField } = require('discord.js')
 
 module.exports = {
-  name: 'add-level',
-  description: 'Ajouter des niveaux à un membre',
+  name: 'reset-level',
+  description: "Retirer tout les niveaux d'un membre",
   permission: "Aucune",
   dm: false,
   category: "💹Experience",
@@ -14,30 +14,27 @@ module.exports = {
       required: true,
       autocomplete: false,
     },
-    {
-      type: "number",
-      name: "level",
-      description: "Quel est le level ?",
-      required: true,
-      autocomplete: false,
-    }
   ],
-  
   async run(bot, message, args, db) {
     let user = args.getUser("membre")
 
     db.query(`SELECT * FROM xp WHERE guildId = '${message.guild.id}' AND userId = '${user.id}'`, async (err, req) => {
-      let level = parseInt(req[0].level)
-      let leveltoadd = parseInt(args.getNumber("level"))
-
-        db.query(`UPDATE xp SET level = '${level + leveltoadd}' WHERE guildId = '${message.guild.id}' AND userId = '${user.id}' `)
+      if (req[0].level <= 0) {
 
         let Embed = new EmbedBuilder()
-        .setTitle("Niveau Ajouter")
-        .setDescription(`\`${leveltoadd} niveaux\` on été ajouté à ${user} par ${message.user}`)
+          .setTitle("Niveau retirer")
+         .setDescription(`Aucun niveau on été retirer à ${user}, car il est déjà niveau 0`)
 
         message.reply({ embeds: [Embed] })
-      
+      } else {
+        let Embed = new EmbedBuilder()
+          .setTitle("Niveau Retirer")
+          .setDescription(`Tout les niveaux (${req[0].level}) de ${user} on été retirer par ${message.user}`)
+
+        message.reply({ embeds: [Embed] })
+
+        db.query(`UPDATE xp SET level = '0' WHERE guildId = '${message.guild.id}' AND userId = '${user.id}'`)
+      }
     })
   }
 }
