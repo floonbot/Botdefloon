@@ -1,297 +1,184 @@
 const Discord = require("discord.js");
-const fs = require("fs");
 const moment = require("moment");
 require("moment-duration-format");
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, SelectMenuBuilder } = require("discord.js");
-const { pingE, TimeE, pc, cpuE, ram, ssd, Sys, cm, wifi, Sos, infoE } = require("../json/emoji.json");
+const { pingE, TimeE, infoE } = require("../json/emoji.json");
 
 
 module.exports = async (bot, interaction) => {
 
-
   if (interaction.type === Discord.InteractionType.ApplicationCommandAutocomplete) {
 
-    try {
+    let entry = interaction.options.getFocused()
 
-      let entry = interaction.options.getFocused()
+    if (interaction.commandName === "help") {
 
-      if (interaction.commandName === "help") {
+      let choices = bot.commands.filter(cmd => cmd.name.includes(entry))
+      await interaction.respond(entry === "" ? bot.commands.map(cmd => ({ name: cmd.name, value: cmd.name })) : choices.map(choice => ({ name: choice.name, value: choice.name })))
+    }
 
-        let choices = bot.commands.filter(cmd => cmd.name.includes(entry))
-        await interaction.respond(entry === "" ? bot.commands.map(cmd => ({ name: cmd.name, value: cmd.name })) : choices.map(choice => ({ name: choice.name, value: choice.name })))
+    if (interaction.commandName === "eval") {
+
+      let choices = ["+", "-", "*", "/", "%"]
+      let sortie = choices.filter(c => c.includes(entry))
+      await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
+    }
+
+    if (interaction.commandName === "setcommandes") {
+
+      let choices;
+
+      const focusedOption = interaction.options.getFocused(true);
+
+      if (focusedOption.name === 'commande') {
+        choices = ['logs', 'antiraid', 'captcha', 'suggest', 'welcome', 'goodbye']
       }
 
-      if (interaction.commandName === "eval") {
-
-        let choices = ["+", "-", "*", "/", "%"]
-        let sortie = choices.filter(c => c.includes(entry))
-        await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
+      if (focusedOption.name === 'état') {
+        choices = ['on', 'off']
       }
 
-      if (interaction.commandName === "setcommandes") {
+      let sortie = choices.filter(c => c.includes(entry))
+      await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
+    }
 
-        let choices;
+    if (interaction.commandName === "traduction") {
 
-        const focusedOption = interaction.options.getFocused(true);
+      let choices;
 
-        if (focusedOption.name === 'commande') {
-          choices = ['logs', 'antiraid', 'captcha', 'suggest', 'welcome', 'goodbye']
-        }
+      const focusedOption = interaction.options.getFocused(true);
 
-        if (focusedOption.name === 'état') {
-          choices = ['on', 'off']
-        }
-
-        let sortie = choices.filter(c => c.includes(entry))
-        await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
+      if (focusedOption.name === 'langue') {
+        choices = ['fr', 'en', 'ja']
       }
 
-      if (interaction.commandName === "traduction") {
+      let sortie = choices.filter(c => c.includes(entry))
+      await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
+    }
 
-        let choices;
+    if (interaction.commandName === "setyoutube") {
 
-        const focusedOption = interaction.options.getFocused(true);
+      let choices = ["off", "on"]
+      let sortie = choices.filter(c => c.includes(entry))
+      await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
+    }
 
-        if (focusedOption.name === 'langue') {
-          choices = ['fr', 'en', 'ja']
-        } 
+    if (interaction.commandName === "setstatus") {
 
-        let sortie = choices.filter(c => c.includes(entry))
-        await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
-      }
+      let choices = ["Listening", "Playing", "Competing", "Watching", "Streaming"]
+      let sortie = choices.filter(c => c.includes(entry))
+      await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
+    }
 
-      if (interaction.commandName === "setyoutube") {
+    if (interaction.commandName === "gif") {
 
-        let choices = ["off", "on"]
-        let sortie = choices.filter(c => c.includes(entry))
-        await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
-      }
+      let choices = ["kill", "kiss", "badass", "punch"]
+      let sortie = choices.filter(c => c.includes(entry))
+      await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
+    }
 
-      if (interaction.commandName === "setstatus") {
+    if (interaction.commandName === "nsfw") {
 
-        let choices = ["Listening", "Playing", "Competing", "Watching", "Streaming"]
-        let sortie = choices.filter(c => c.includes(entry))
-        await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
-      }
+      let choices = ["pussy", "aHarem", "boobs"]
+      let sortie = choices.filter(c => c.includes(entry))
+      await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
+    }
 
-      if (interaction.commandName === "gif") {
+    if (interaction.commandName === "pfc") {
 
-        let choices = ["kill", "kiss", "badass", "punch"]
-        let sortie = choices.filter(c => c.includes(entry))
-        await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
-      }
-
-      if (interaction.commandName === "nsfw") {
-
-        let choices = ["pussy", "aHarem", "boobs"]
-        let sortie = choices.filter(c => c.includes(entry))
-        await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
-      }
-
-      if (interaction.commandName === "pfc") {
-
-        let choices = ["pierre", "feuille", "ciseaux"]
-        let sortie = choices.filter(c => c.includes(entry))
-        await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
-      }
-
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS L'EVENT AUTOCOMPLETE !!
-  
-      >--------------- L'ERREUR ----------------<
-
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️ UNE ERREUR DANS L'EVENT AUTOCOMPLETE !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
+      let choices = ["pierre", "feuille", "ciseaux"]
+      let sortie = choices.filter(c => c.includes(entry))
+      await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
     }
   }
 
-
   if (interaction.type === Discord.InteractionType.ApplicationCommand) {
 
-    try {
-
-      const command = interaction.client.commands.get(interaction.commandName);
-      command?.run?.(bot, interaction, interaction.options, bot.db)
-
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS L'EVENT POUR CREE LA COMMANDE !!
-
-      >--------------- L'ERREUR ----------------<
-
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️ UNE ERREUR DANS L'EVENT POUR CREE LA COMMANDE !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
-    }
+    const command = interaction.client.commands.get(interaction.commandName);
+    command?.run?.(bot, interaction, interaction.options, bot.db)
   }
 
   if (interaction.isButton()) {
 
     if (interaction.customId.startsWith("reglement")) {
 
-      try {
-        const role = interaction.guild.roles.cache.get(interaction.customId.split("reglement")[1])
-        interaction.member.roles.add(role.id).then(() => {
-          interaction.reply({ content: `<@&${role.id}> a étais ajouter `, ephemeral: true })
-        })
-
-      } catch (err) {
-        console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS L'EVENT POUR LE REGLEMENT !!
-  
-      >--------------- L'ERREUR ----------------<
-
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-        fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-        let channel = await bot.channels.cache.get("1041816985920610354")
-        channel.send({ content: `⚠️ UNE ERREUR DANS L'EVENT REGLEMENT !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
-      }
+      const role = interaction.guild.roles.cache.get(interaction.customId.split("reglement")[1])
+      interaction.member.roles.add(role.id).then(() => {
+        interaction.reply({ content: `<@&${role.id}> a étais ajouter `, ephemeral: true })
+      })
     }
-    try {
 
-      if (interaction.customId.startsWith("Ping")) {
+    if (interaction.customId.startsWith("Ping")) {
 
-        const ping = Date.now() - interaction.createdAt;
-        const api_ping = bot.ws.ping;
-        const uptime = moment.duration(interaction.client.uptime).format(" D[d], H[h], m[m], s[s]")
+      const ping = Date.now() - interaction.createdAt;
+      const api_ping = bot.ws.ping;
+      const uptime = moment.duration(interaction.client.uptime).format(" D[d], H[h], m[m], s[s]")
 
-        const row = new ActionRowBuilder()
-          .addComponents(
-            new ButtonBuilder()
-              .setLabel("Actualiser")
-              .setStyle(ButtonStyle.Success)
-              .setCustomId("Ping")
-          )
+      const row = new ActionRowBuilder()
+        .addComponents(
+          new ButtonBuilder()
+            .setLabel("Actualiser")
+            .setStyle(ButtonStyle.Success)
+            .setCustomId("Ping")
+        )
 
-        pingEmbed = new Discord.EmbedBuilder()
-          .setColor("#0070FF")
-          .setTitle(`La lantence du bot`)
-          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-          .setDescription(`
+      pingEmbed = new Discord.EmbedBuilder()
+        .setColor("#0070FF")
+        .setTitle(`La lantence du bot`)
+        .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+        .setDescription(`
                     
                     > ${pingE} **Bot :** \`${ping}\` ms 
                     > ${pingE} **API :** \`${api_ping}\` ms
                     > ${TimeE}**Temps Uptime :** ${uptime}`)
-          .setTimestamp()
-          .setFooter({ text: "Ping" })
-        interaction.update({ embeds: [pingEmbed], components: [row] })
-      }
-
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS L'EVENT PING !!
-  
-      >--------------- L'ERREUR ----------------<
-  
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️ UNE ERREUR DANS L'EVENT PING !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
+        .setTimestamp()
+        .setFooter({ text: "Ping" })
+      interaction.update({ embeds: [pingEmbed], components: [row] })
     }
+  }
 
+  if (interaction.isButton()) {
 
+    if (interaction.customId === "close") {
 
-      if (interaction.customId === "primary") {
+      let EmbedPermissionClose = new EmbedBuilder()
+        .setColor("#3dffcc")
+        .setDescription(`❌ Vous n'avez pas la permission requise !`)
 
-        let channel = await interaction.guild.channels.create({
-          name: `${interaction.user.username} ticket`,
-          type: Discord.ChannelType.GuildText,
-          permissionOverwrites: [
-            {
-              id: interaction.guild.roles.everyone,
-              deny: [Discord.PermissionFlagsBits.ViewChannel],
-            }, {
-              id: interaction.user,
-              allow: [Discord.PermissionFlagsBits.SendMessages, Discord.PermissionFlagsBits.ViewChannel, Discord.PermissionFlagsBits.ReadMessageHistory],
-            }
-          ],
-        })
+      if (!interaction.member.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) return interaction.reply({ embeds: [EmbedPermissionClose], ephemeral: true })
 
-        await interaction.reply({ content: `**Ticket créer avec succes ${channel}**`, ephemeral: true })
-
-        const clearembed = new Discord.EmbedBuilder()
-          .setTitle(`${interaction.user.username}`)
-          .setDescription(`${interaction.user}\n merci de patienter que le staff vienent vous aider ecrivez votre probleme dans le ticket`)
-          .setColor("Aqua")
-
-        const deletebutton = new Discord.ActionRowBuilder()
-          .addComponents(
-            new ButtonBuilder()
-              .setCustomId('delete')
-              .setEmoji("❌")
-              .setLabel('Supprimer le ticket')
-              .setStyle(ButtonStyle.Danger)
+      let EmbedCloseTicket = new EmbedBuilder()
+        .setColor("#3dffcc")
+        .setDescription(`Êtes-vous sûr de vouloir fermer le ticket ?`)
+      let Button = new ActionRowBuilder()
+        .addComponents(new ButtonBuilder()
+          .setCustomId('oui')
+          .setLabel("Oui")
+          .setStyle(ButtonStyle.Success),
+          new ButtonBuilder()
+            .setCustomId('non')
+            .setLabel("Non")
+            .setStyle(ButtonStyle.Danger),
         );
-        await channel.send({ embeds: [clearembed], components: [deletebutton] })
-      }
+      await interaction.reply({ embeds: [EmbedCloseTicket], components: [Button] });
+    }
+    else if (interaction.customId === "oui") {
+      let EmbedPermissionClose = new EmbedBuilder()
+        .setColor("#3dffcc")
+        .setDescription(`❌ Vous n'avez pas la permission requise !`)
 
-    try {
+      if (!interaction.member.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) return interaction.reply({ embeds: [EmbedPermissionClose], ephemeral: true })
 
-      if (interaction.customId === "delete") {
+      interaction.channel.delete();
+    }
+    else if (interaction.customId === "non") {
+      let EmbedPermissionClose = new EmbedBuilder()
+        .setColor("#3dffcc")
+        .setDescription(`❌ Vous n'avez pas la permission requise !`)
 
-        const surbutton = new Discord.ActionRowBuilder()
-          .addComponents(
-            new ButtonBuilder()
-              .setCustomId('oui')
-              .setLabel('oui')
-              .setStyle(ButtonStyle.Primary)
-          )
-          .addComponents(
-            new ButtonBuilder()
-              .setCustomId('non')
-              .setLabel('non')
-              .setStyle(ButtonStyle.Danger)
-        )
-        await interaction.reply({ content: "**Etes vous sur de vouloir supprimer ce ticket ?**", components: [surbutton], ephemeral: true })
-      }
+      if (!interaction.member.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) return interaction.reply({ embeds: [EmbedPermissionClose], ephemeral: true })
 
-      if (interaction.customId === "oui") {
-
-        await interaction.guild.channels.delete(interaction.channel)
-      }
-      if (interaction.customId === "non") {
-        await interaction.reply({ content: "**Suppresion de ticket annulé**", ephemeral: true })
-      }
-
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS L'EVENT TICKET !!
-  
-      >--------------- L'ERREUR ----------------<
-  
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️ UNE ERREUR DANS L'EVENT TICKET !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
+      interaction.message.delete()
     }
   }
 
@@ -299,109 +186,108 @@ module.exports = async (bot, interaction) => {
 
     if (interaction.customId === 'help') {
 
-      try {
-        const row = new Discord.ActionRowBuilder()
-          .addComponents(
-            new Discord.SelectMenuBuilder()
-              .setCustomId('help')
-              .setPlaceholder('Choix')
-              .addOptions(
-                {
+      const row = new Discord.ActionRowBuilder()
+        .addComponents(
+          new Discord.SelectMenuBuilder()
+            .setCustomId('help')
+            .setPlaceholder('Choix')
+            .addOptions(
+              {
 
-                  label: "Select pour toute l'accueil",
-                  description: 'accueil',
-                  value: 'choix7',
-                },
-                {
+                label: "Select pour toute l'accueil",
+                description: 'accueil',
+                value: 'choix7',
+              },
+              {
 
-                  label: 'Select pour toute les commandes',
-                  description: 'Toute les commandes',
-                  value: 'choix1',
-                },
-                {
+                label: 'Select pour toute les commandes',
+                description: 'Toute les commandes',
+                value: 'choix1',
+              },
+              {
 
-                  label: "Select pour les commandes d'information 👆🏻",
-                  description: 'Commande information',
-                  value: 'choix3',
-                },
-                {
+                label: "Select pour les commandes d'information 👆🏻",
+                description: 'Commande information',
+                value: 'choix3',
+              },
+              {
 
-                  label: 'Select pour les commandes xp 💹',
-                  description: 'Commande xp',
-                  value: 'choix2',
-                },
-                {
+                label: 'Select pour les commandes xp 💹',
+                description: 'Commande xp',
+                value: 'choix2',
+              },
+              {
 
-                  label: 'Select pour les setcommandes 🗃️',
-                  description: 'Set des commandes',
-                  value: 'choix6',
-                },
-                {
+                label: 'Select pour les setcommandes 🗃️',
+                description: 'Set des commandes',
+                value: 'choix6',
+              },
+              {
 
-                  label: "Select pour les commandes fun 🥳",
-                  description: 'Commande fun',
-                  value: 'choix4',
-                },
-                {
+                label: "Select pour les commandes fun 🥳",
+                description: 'Commande fun',
+                value: 'choix4',
+              },
+              {
 
-                  label: "Select pour les commandes modérateur 🧑🏻‍⚖️",
-                  description: 'Commande modérateur',
-                  value: 'choix5',
-                }
-              )
-          )
+                label: "Select pour les commandes modérateur 🧑🏻‍⚖️",
+                description: 'Commande modérateur',
+                value: 'choix5',
+              }
+            )
+        )
 
-        if (interaction.values == 'choix1') {
+      if (interaction.values == 'choix1') {
 
-          let command;
+        let command;
 
-          if (!command) {
+        if (!command) {
 
-            let categories = [];
-            bot.commands.forEach(command => {
-              if (!categories.includes(command.category)) categories.push(command.category)
-            })
-
-            let Embed = new Discord.EmbedBuilder()
-              .setColor("#0070FF")
-              .setTitle(`Info des commandes`)
-              .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
-              .setTimestamp()
-              .setFooter({ text: "Commandes du bot" })
-
-            await categories.sort().forEach(async cat => {
-
-              let commands = bot.commands.filter(cmd => cmd.category === cat)
-              Embed.addFields({ name: `${cat}`, value: `${commands.map(cmd => `\`${cmd.name}\` : ${cmd.description}`).join("\n")}` })
-            })
-            await interaction.update({ embeds: [Embed], components: [row] })
-
-          }
-        }
-
-        if (interaction.values == 'choix2') {
+          let categories = [];
+          bot.commands.forEach(command => {
+            if (!categories.includes(command.category)) categories.push(command.category)
+          })
 
           let Embed = new Discord.EmbedBuilder()
             .setColor("#0070FF")
             .setTitle(`Info des commandes`)
             .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
-            .setDescription(`${infoE} **__Commande pour les commandes xp__**
-  
-                  \`rank\` : Donne l'xp d'un membre
-                  \`leaderboard\` : Envoie le top 10 des membres avec le plus d'xp`)
             .setTimestamp()
             .setFooter({ text: "Commandes du bot" })
 
+          await categories.sort().forEach(async cat => {
+
+            let commands = bot.commands.filter(cmd => cmd.category === cat)
+            Embed.addFields({ name: `${cat}`, value: `${commands.map(cmd => `\`${cmd.name}\` : ${cmd.description}`).join("\n")}` })
+          })
           await interaction.update({ embeds: [Embed], components: [row] })
+
         }
+      }
 
-        if (interaction.values == 'choix3') {
+      if (interaction.values == 'choix2') {
 
-          let Embed = new Discord.EmbedBuilder()
-            .setColor("#0070FF")
-            .setTitle(`Info des commandes`)
-            .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
-            .setDescription(`${infoE} **__Commande pour les commandes information__**
+        let Embed = new Discord.EmbedBuilder()
+          .setColor("#0070FF")
+          .setTitle(`Info des commandes`)
+          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
+          .setDescription(`${infoE} **__Commande pour les commandes xp__**
+  
+                  \`rank\` : Donne l'xp d'un membre
+                  \`leaderboard\` : Envoie le top 10 des membres avec le plus d'xp`)
+          .setTimestamp()
+          .setFooter({ text: "Commandes du bot" })
+
+        await interaction.update({ embeds: [Embed], components: [row] })
+      }
+
+      if (interaction.values == 'choix3') {
+
+        let Embed = new Discord.EmbedBuilder()
+          .setColor("#0070FF")
+          .setTitle(`Info des commandes`)
+          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
+          .setDescription(`${infoE} **__Commande pour les commandes information__**
   
                   \`admin-list\` : Permet de regarder le nombre d'admin
                   \`booster-list\` : Permet de voir la liste des boosts sur le serveur
@@ -417,19 +303,19 @@ module.exports = async (bot, interaction) => {
                   \`suggest\` : Permet d'envoyer une suggestion
                   \`url\` : Permet de voir l'url personnaliser du serveur
                   \`user-info\` : Permet de voir les informations d'un membre`)
-            .setTimestamp()
-            .setFooter({ text: "Commandes du bot" })
+          .setTimestamp()
+          .setFooter({ text: "Commandes du bot" })
 
-          await interaction.update({ embeds: [Embed], components: [row] })
-        }
+        await interaction.update({ embeds: [Embed], components: [row] })
+      }
 
-        if (interaction.values == 'choix4') {
+      if (interaction.values == 'choix4') {
 
-          let Embed = new Discord.EmbedBuilder()
-            .setColor("#0070FF")
-            .setTitle(`Info des commandes`)
-            .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
-            .setDescription(`${infoE} **__Commande pour les commandes fun__**
+        let Embed = new Discord.EmbedBuilder()
+          .setColor("#0070FF")
+          .setTitle(`Info des commandes`)
+          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
+          .setDescription(`${infoE} **__Commande pour les commandes fun__**
   
                   \`8ball\` : Pose une question et il te dira la vérité
                   \`avatar\` : Permet de récupérer l'avatar d'un membre
@@ -439,19 +325,19 @@ module.exports = async (bot, interaction) => {
                   \`nsfw\` : envoye une image nsfw
                   \`pfc\` : Joue à pfc
                   \`random\` : Le bot prend au hasard un nombre entre 1 et 100`)
-            .setTimestamp()
-            .setFooter({ text: "Commandes du bot" })
+          .setTimestamp()
+          .setFooter({ text: "Commandes du bot" })
 
-          await interaction.update({ embeds: [Embed], components: [row] })
-        }
+        await interaction.update({ embeds: [Embed], components: [row] })
+      }
 
-        if (interaction.values == 'choix5') {
+      if (interaction.values == 'choix5') {
 
-          let Embed = new Discord.EmbedBuilder()
-            .setColor("#0070FF")
-            .setTitle(`Info des commandes`)
-            .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
-            .setDescription(`${infoE} **__Commande pour les commandes modérateur__**
+        let Embed = new Discord.EmbedBuilder()
+          .setColor("#0070FF")
+          .setTitle(`Info des commandes`)
+          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
+          .setDescription(`${infoE} **__Commande pour les commandes modérateur__**
   
                   \`add-lemoji\` : Permet d'ajouter un émoji sur le serveur
                   \`ban\` : Pour Ban le membre qui à fait l'infractions
@@ -475,63 +361,124 @@ module.exports = async (bot, interaction) => {
                   \`unwarn\` : Permet de supprimer un warn d'un membre
                   \`warn\` : Pour warn un membre sur le serveur
                   \`warnlist\` : Affiche les warns d'un membre`)
-            .setTimestamp()
-            .setFooter({ text: "Commandes du bot" })
+          .setTimestamp()
+          .setFooter({ text: "Commandes du bot" })
 
-          await interaction.update({ embeds: [Embed], components: [row] })
-        }
+        await interaction.update({ embeds: [Embed], components: [row] })
+      }
 
-        if (interaction.values == 'choix6') {
+      if (interaction.values == 'choix6') {
 
-          let Embed = new Discord.EmbedBuilder()
-            .setColor("#0070FF")
-            .setTitle(`Info des commandes`)
-            .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
-            .setDescription(`${infoE} **__Commande pour les setcommandes__**
+        let Embed = new Discord.EmbedBuilder()
+          .setColor("#0070FF")
+          .setTitle(`Info des commandes`)
+          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
+          .setDescription(`${infoE} **__Commande pour les setcommandes__**
   
                   \`setcommandes\` : Paramètre les commandes sur le serveur
                   \`setstatus\` : Paramètre les commandes sur le serveur`)
-            .setTimestamp()
-            .setFooter({ text: "Commandes du bot" })
+          .setTimestamp()
+          .setFooter({ text: "Commandes du bot" })
 
-          await interaction.update({ embeds: [Embed], components: [row] })
-        }
+        await interaction.update({ embeds: [Embed], components: [row] })
+      }
 
-        if (interaction.values == 'choix7') {
+      if (interaction.values == 'choix7') {
 
-          let categories = [];
-          bot.commands.forEach(command => {
-            if (!categories.includes(command.category)) categories.push(command.category)
-          })
+        let categories = [];
+        bot.commands.forEach(command => {
+          if (!categories.includes(command.category)) categories.push(command.category)
+        })
 
-          let Embed1 = new Discord.EmbedBuilder()
-            .setColor("#0070FF")
-            .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
-            .setDescription(`${infoE} **__Bienvenue sur la commande help__**
+        let Embed1 = new Discord.EmbedBuilder()
+          .setColor("#0070FF")
+          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
+          .setDescription(`${infoE} **__Bienvenue sur la commande help__**
   
                     > Commands disponibles : \`${bot.commands.size}\`
                     > Catégories disponibles : \`${categories.length}\``)
-            .setTimestamp()
-            .setFooter({ text: "Commandes du bot" })
+          .setTimestamp()
+          .setFooter({ text: "Commandes du bot" })
 
-          await interaction.update({ embeds: [Embed1], components: [row] })
-        }
+        await interaction.update({ embeds: [Embed1], components: [row] })
+      }
+    }
+  }
 
-      } catch (err) {
-        console.log(`
-            >------------ OUPS UNE ERREUR ------------<
-            
-            UNE ERREUR DANS L'EVENT POUR LE HELP !!
-        
-            >--------------- L'ERREUR ----------------<
-  
-            ${err}
-            
-            >-----------------------------------------<
-            `)
-        fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-        let channel = await bot.channels.cache.get("1041816985920610354")
-        channel.send({ content: `⚠️ UNE ERREUR DANS L'EVENT POUR LE HELP !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
+  if (interaction.isSelectMenu()) {
+
+    if (interaction.customId === 'menuticket') {
+
+      if (interaction.values == 'Questions', 'Plainte', 'Bug') {
+
+        const EmbedTicket1 = new EmbedBuilder()
+          .setColor("#FF0000")
+          .setTitle(`Créer un ticket :   `)
+          .setDescription(`Pour **Ouvrir** un **Ticket** Séléctionnez la **catégorie** qui vous convient`)
+          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+          .setTimestamp()
+          .setFooter({ text: "Ticket" });
+
+        const RowTicket = new ActionRowBuilder()
+          .addComponents(
+
+            new SelectMenuBuilder()
+              .setCustomId('menuticket')
+              .setPlaceholder('Sélectionner le type de ticket que vous voulez !!')
+              .addOptions(
+                {
+                  label: `Questions`,
+                  description: `Poser une question de tout type`,
+                  emoji: `❓`,
+                  value: `Questions`,
+                },
+                {
+                  label: `Plainte`,
+                  description: `Faire une plainte envers un staff ou un membre du Discord`,
+                  emoji: `🖋`,
+                  value: `Plainte`,
+                },
+                {
+                  label: `Bug`,
+                  description: `Signaler un bug`,
+                  emoji: `⚠`,
+                  value: `Bug`,
+                }
+              )
+          )
+        await interaction.deferUpdate();
+        await interaction.editReply({ embeds: [EmbedTicket1], components: [RowTicket] })
+
+        let channel = await interaction.guild.channels.create({
+          name: `${interaction.values}-${interaction.user.username}`,
+          type: ChannelType.GuildText,
+          permissionOverwrites: [
+            {
+              id: interaction.guild.roles.everyone,
+              deny: [Discord.PermissionFlagsBits.ViewChannel],
+            },
+            {
+              id: interaction.user,
+              allow: [Discord.PermissionFlagsBits.SendMessages, Discord.PermissionFlagsBits.ViewChannel],
+            }
+          ]
+        })
+
+        let EmbedCreateChannel = new EmbedBuilder()
+          .setColor("#3dffcc")
+          .setTitle('Ticket ouvert')
+          .setDescription("<@" + interaction.user.id + "> Voici votre ticket.\nExpliquez-nous en détail votre problème !")
+          .setTimestamp()
+          .setFooter({ text: `${bot.user.username}`, iconURL: bot.user.displayAvatarURL({ dynamic: true }) });
+        const Row = new ActionRowBuilder()
+          .addComponents(new ButtonBuilder()
+            .setCustomId('close')
+            .setLabel('Fermer le ticket')
+            .setEmoji('🗑️')
+            .setStyle(ButtonStyle.Danger),
+          )
+
+        await channel.send({ embeds: [EmbedCreateChannel], components: [Row] })
       }
     }
   }
