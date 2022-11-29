@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const moment = require("moment");
 require("moment-duration-format");
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, SelectMenuBuilder } = require("discord.js");
-const { pingE, TimeE, infoE } = require("../json/emoji.json");
+const { pingE, TimeE, infoE, Emojibot } = require("../json/emoji.json");
 
 
 module.exports = async (bot, interaction) => {
@@ -190,53 +190,59 @@ module.exports = async (bot, interaction) => {
         .addComponents(
           new Discord.SelectMenuBuilder()
             .setCustomId('help')
-            .setPlaceholder('Choix')
+            .setPlaceholder('✅ |CHOIX  !!')
             .addOptions(
               {
 
                 label: "Select pour toute l'accueil",
                 description: 'accueil',
+                emoji: `${Emojibot}`,
                 value: 'choix7',
               },
               {
 
                 label: 'Select pour toute les commandes',
                 description: 'Toute les commandes',
+                emoji: "🤖",
                 value: 'choix1',
               },
               {
 
-                label: "Select pour les commandes d'information 👆🏻",
+                label: "Select pour les commandes d'information",
                 description: 'Commande information',
+                emoji: `${infoE}`,
                 value: 'choix3',
               },
               {
 
-                label: 'Select pour les commandes xp 💹',
+                label: 'Select pour les commandes xp',
                 description: 'Commande xp',
+                emoji: `💹`,
                 value: 'choix2',
               },
               {
 
-                label: 'Select pour les setcommandes 🗃️',
+                label: 'Select pour les setcommandes',
                 description: 'Set des commandes',
+                emoji: `🗃️`,
                 value: 'choix6',
               },
               {
 
-                label: "Select pour les commandes fun 🥳",
-                description: 'Commande fun',
+                label: "Select pour les commandes fun",
+                description: 'Commande fun ',
+                emoji: `🥳`,
                 value: 'choix4',
               },
               {
 
-                label: "Select pour les commandes modérateur 🧑🏻‍⚖️",
+                label: "Select pour les commandes modérateur",
                 description: 'Commande modérateur',
+                emoji: `🧑🏻‍⚖️`,
                 value: 'choix5',
               }
             )
         )
-
       if (interaction.values == 'choix1') {
 
         let command;

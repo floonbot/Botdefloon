@@ -23,7 +23,7 @@ module.exports = {
             .addComponents(
       new SelectMenuBuilder()
       .setCustomId('menuticket')
-      .setPlaceholder('✅ |CHOIX  !')
+      .setPlaceholder('✅ |CHOIX  !!')
       .addOptions(
         {
             label: `Questions`,
