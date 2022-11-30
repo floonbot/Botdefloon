@@ -79,7 +79,7 @@ module.exports = async (bot, interaction) => {
 
     if (interaction.commandName === "nsfw") {
 
-      let choices = ["pussy", "aHarem", "boobs"]
+      let choices = ["pussy", "aHarem", "boobs", "lesbienne"]
       let sortie = choices.filter(c => c.includes(entry))
       await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
     }

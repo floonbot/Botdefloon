@@ -1,5 +1,4 @@
 const Discord = require("discord.js")
-const fs = require("fs");
 const ms = require("ms");
 const { muteE, serveurE, userE, modoE, textE, TimeE } = require("../.././json/emoji.json");
 
@@ -34,7 +33,6 @@ module.exports = {
   ],
   async run(bot, message, args, db) {
 
-
     let user = args.getUser("membre");
     if (!user) return message.reply({ content: "Pas de membre à mute !!", ephemeral: true })
     let member = message.guild.members.cache.get(user.id)
@@ -56,72 +54,53 @@ module.exports = {
 
     try {
 
-      try {
-
-        let muteEmbed = new Discord.EmbedBuilder()
-          .setColor("#FF0000")
-          .setTitle(`Mute par ${message.user.tag}`)
-          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-          .setDescription(`${muteE} **__Mute__** 
+      let muteEmbed = new Discord.EmbedBuilder()
+        .setColor("#FF0000")
+        .setTitle(`Mute par ${message.user.tag}`)
+        .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+        .setDescription(`${muteE} **__Mute__** 
                 
                 > ${serveurE} **Serveur :**\`${message.guild.name}\`
                 > ${TimeE} **Time :**\`${time}\`
                 > ${modoE} **Modérateur :**\`${message.user.tag}\`
                 > ${textE} **Raison :** \`${reason}\`!`)
-          .setTimestamp()
-          .setFooter({ text: "Mute" })
-        await user.send({ embeds: [muteEmbed] })
-      } catch (err) { return }
-      await message.deferReply()
+        .setTimestamp()
+        .setFooter({ text: "Mute" })
+      await user.send({ embeds: [muteEmbed] })
+    } catch (err) { return }
+    await message.deferReply()
 
-      let Embed = new Discord.EmbedBuilder()
-        .setColor("#FF5D00")
-        .setTitle(`Chargement de la commande mute !!`)
-        .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-        .setDescription(`${muteE}**__Je suis entrain de kick le membre__**${muteE}
+    let Embed = new Discord.EmbedBuilder()
+      .setColor("#FF5D00")
+      .setTitle(`Chargement de la commande mute !!`)
+      .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+      .setDescription(`${muteE}**__Je suis entrain de kick le membre__**${muteE}
 
             > **Sur le serveur :** ${message.guild.name}, 
             
             \`veuillez patienter\`.`)
-        .setTimestamp()
-        .setFooter({ text: "mute" })
-      await message.followUp({ embeds: [Embed] }).then(() => {
+      .setTimestamp()
+      .setFooter({ text: "mute" })
+    await message.followUp({ embeds: [Embed] }).then(() => {
 
-        let muteEmbed = new Discord.EmbedBuilder()
-          .setColor("#FF0000")
-          .setTitle(`Le membre a étais mute`)
-          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-          .setDescription(`${muteE} **__Mute__** 
+      let muteEmbed = new Discord.EmbedBuilder()
+        .setColor("#FF0000")
+        .setTitle(`Le membre a étais mute`)
+        .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+        .setDescription(`${muteE} **__Mute__** 
 
             > ${modoE} **Modérateur :** \`${message.user.tag}\`
             > ${userE} **Membre qui est kick :** \`${user.tag}\`
             > ${TimeE} **Time :**\`${time}\`
             > ${textE} **Raison :** \`${reason}\`!`)
-          .setTimestamp()
-          .setFooter({ text: "Mute" })
-        setTimeout(async () => await message.editReply({ embeds: [muteEmbed] }), 2000)
-      })
-      await member.timeout(ms(time), reason)
+        .setTimestamp()
+        .setFooter({ text: "Mute" })
+      setTimeout(async () => await message.editReply({ embeds: [muteEmbed] }), 2000)
+    })
+    await member.timeout(ms(time), reason)
 
-      let ID = await bot.fonction.createId("MUTE")
+    let ID = await bot.fonction.createId("MUTE")
 
-      db.query(`INSERT INTO mutes (guild, guildId, user, userId, author, authorId, mute, time, reason, date) VALUES ('${message.guild.name}', '${message.guild.id}','${user.tag}', '${user.id}','${message.user.tag}','${message.user.id}', '${ID}', '${time}', '${reason.replace(/'/g, "\\'")}', '${Date.now()}')`)
-
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS LA COMMANDE MUTE !!
-
-      >--------------- L'ERREUR ----------------<
-
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️ UNE ERREUR DANS LA COMMANDE MUTE !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
-    }
+    db.query(`INSERT INTO mutes (guild, guildId, user, userId, author, authorId, mute, time, reason, date) VALUES ('${message.guild.name}', '${message.guild.id}','${user.tag}', '${user.id}','${message.user.tag}','${message.user.id}', '${ID}', '${time}', '${reason.replace(/'/g, "\\'")}', '${Date.now()}')`)
   }
 }

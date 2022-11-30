@@ -1,4 +1,4 @@
-const { EmbedBuilder, ApplicationCommandOptionType, AttachmentBuilder, PermissionsBitField } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
 
 module.exports = {
   name: 'add-level',
@@ -22,7 +22,7 @@ module.exports = {
       autocomplete: false,
     }
   ],
-  
+
   async run(bot, message, args, db) {
     let user = args.getUser("membre")
 
@@ -30,14 +30,14 @@ module.exports = {
       let level = parseInt(req[0].level)
       let leveltoadd = parseInt(args.getNumber("level"))
 
-        db.query(`UPDATE xp SET level = '${level + leveltoadd}' WHERE guildId = '${message.guild.id}' AND userId = '${user.id}' `)
+      db.query(`UPDATE xp SET level = '${level + leveltoadd}' WHERE guildId = '${message.guild.id}' AND userId = '${user.id}' `)
 
-        let Embed = new EmbedBuilder()
+      let Embed = new EmbedBuilder()
         .setTitle("Niveau Ajouter")
         .setDescription(`\`${leveltoadd} niveaux\` on été ajouté à ${user} par ${message.user}`)
 
-        message.reply({ embeds: [Embed] })
-      
+      message.reply({ embeds: [Embed] })
+
     })
   }
 }

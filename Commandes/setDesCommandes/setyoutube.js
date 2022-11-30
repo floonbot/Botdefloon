@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const fs = require("fs");
 const { logE } = require("../.././json/emoji.json")
 const { AttachmentBuilder } = require("discord.js")
 const { png } = require("../../json/saveImage/png.json");
@@ -30,103 +29,85 @@ module.exports = {
   ],
   async run(bot, message, args, db,) {
 
-    try {
+    let etat = args.getString("état")
+    let youtube = args.getString("lien");
 
-      let etat = args.getString("état")
-      let youtube = args.getString("lien");
+    if (etat === "on" && args.getString("lien") === null) return message.reply({ content: "Merci de mettre un lien !!", ephemeral: true })
 
-      if (etat === "on" && args.getString("lien") === null) return message.reply({ content: "Merci de mettre un lien !!", ephemeral: true })
+    if (etat === "on" && !args.getString("lien").match(new RegExp(/(https?:\/\/)?(www\.)?youtu((\.be)|(be\..{2,5}))\/((user)|(channel))\/?([a-zA-Z0-9\-_]{1,})/))) {
 
-      if (etat === "on" && !args.getString("lien").match(new RegExp(/(https?:\/\/)?(www\.)?youtu((\.be)|(be\..{2,5}))\/((user)|(channel))\/?([a-zA-Z0-9\-_]{1,})/))) {
+      await message.deferReply({ ephemeral: true })
 
-        await message.deferReply({ ephemeral: true })
+      const file = new AttachmentBuilder(`./assets/${png}`, { name: `image.png` })
 
-        const file = new AttachmentBuilder(`./assets/${png}`, { name: `image.png` })
-
-        let mauvais = new Discord.EmbedBuilder()
-          .setTitle(`**Merci de mettre une url youtbe**`)
-          .setColor("#000000")
-          .setImage(`attachment://${file.name}`)
-          .setDescription("**__Exemple__**")
-          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-          .setTimestamp()
-          .setFooter({ text: "setyoutbe" })
-        return await message.followUp({ embeds: [mauvais], files: [file] })
-      }
-
-      await message.deferReply()
-
-      const cEmbed = new Discord.EmbedBuilder()
-        .setColor("#FF5D00")
-        .setTitle(`Chargement de la commande setcommandes !!`)
+      let mauvais = new Discord.EmbedBuilder()
+        .setTitle(`**Merci de mettre une url youtbe**`)
+        .setColor("#000000")
+        .setImage(`attachment://${file.name}`)
+        .setDescription("**__Exemple__**")
         .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-        .setDescription(`${logE} **__Je suis entrain de set la commande__** 
+        .setTimestamp()
+        .setFooter({ text: "setyoutbe" })
+      return await message.followUp({ embeds: [mauvais], files: [file] })
+    }
+
+    await message.deferReply()
+
+    const cEmbed = new Discord.EmbedBuilder()
+      .setColor("#FF5D00")
+      .setTitle(`Chargement de la commande setcommandes !!`)
+      .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+      .setDescription(`${logE} **__Je suis entrain de set la commande__** 
       
                   > **Sur le serveur :** ${message.guild.name}
                   
                   \`Veuillez patienter\``)
+      .setTimestamp()
+      .setFooter({ text: "setcommandes" })
+
+    if (etat !== "on" && etat !== "off") {
+
+      let mauvais = new Discord.EmbedBuilder()
+        .setTitle(`**__Les set commandes disponible __**`)
+        .setColor("#000000")
+        .setDescription(`${infoE} Les choix sont : \`off\` et \`on\``)
+        .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
         .setTimestamp()
-        .setFooter({ text: "setcommandes" })
+        .setFooter({ text: "setcommande" })
+      return await message.followUp({ embeds: [mauvais] })
+    }
 
-      if (etat !== "on" && etat !== "off") {
+    if (etat === "off") {
+      db.query(`UPDATE pub SET active = 'false' WHERE guild = '${message.guildId}'`)
 
-        let mauvais = new Discord.EmbedBuilder()
-          .setTitle(`**__Les set commandes disponible __**`)
-          .setColor("#000000")
-          .setDescription(`${infoE} Les choix sont : \`off\` et \`on\``)
-          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
+      return await message.followUp({ embeds: [cEmbed] }).then(() => {
+
+        let Embed = new Discord.EmbedBuilder()
+          .setColor("#FFE800")
+          .setTitle(`SetYoutube`)
+          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+          .setDescription(`Le setyoutube est bien désactiver`)
           .setTimestamp()
-          .setFooter({ text: "setcommande" })
-        return await message.followUp({ embeds: [mauvais] })
-      }
+          .setFooter({ text: "SetYoutube" })
+        setTimeout(async () => await message.editReply({ embeds: [Embed] }), 2000)
+      })
 
-      if (etat === "off") {
-        db.query(`UPDATE pub SET active = 'false' WHERE guild = '${message.guildId}'`)
+    } else if (etat === "on") {
 
-        return await message.followUp({ embeds: [cEmbed] }).then(() => {
+      db.query(`UPDATE pub SET active = 'true' WHERE guild = '${message.guildId}'`)
+      db.query(`UPDATE pub SET youtube = '${youtube}' WHERE guild = '${message.guildId}'`)
 
-          let Embed = new Discord.EmbedBuilder()
-            .setColor("#FFE800")
-            .setTitle(`SetYoutube`)
-            .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-            .setDescription(`Le setyoutube est bien désactiver`)
-            .setTimestamp()
-            .setFooter({ text: "SetYoutube" })
-          setTimeout(async () => await message.editReply({ embeds: [Embed] }), 2000)
-        })
+      return await message.followUp({ embeds: [cEmbed] }).then(() => {
 
-      } else if (etat === "on") {
-
-        db.query(`UPDATE pub SET active = 'true' WHERE guild = '${message.guildId}'`)
-        db.query(`UPDATE pub SET youtube = '${youtube}' WHERE guild = '${message.guildId}'`)
-
-        return await message.followUp({ embeds: [cEmbed] }).then(() => {
-
-          let Embed = new Discord.EmbedBuilder()
-            .setColor("#FFE800")
-            .setTitle(`SetYoutube`)
-            .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-            .setDescription(`Le setyoutube est bien activé`)
-            .setTimestamp()
-            .setFooter({ text: "SetYoutube" })
-          setTimeout(async () => await message.editReply({ embeds: [Embed] }), 2000)
-        })
-      }
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS LA COMMANDE SETYOUTUBE !!
-
-      >--------------- L'ERREUR ----------------<
-
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️ UNE ERREUR DANS LA COMMANDE SETYOUTUBE !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
+        let Embed = new Discord.EmbedBuilder()
+          .setColor("#FFE800")
+          .setTitle(`SetYoutube`)
+          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+          .setDescription(`Le setyoutube est bien activé`)
+          .setTimestamp()
+          .setFooter({ text: "SetYoutube" })
+        setTimeout(async () => await message.editReply({ embeds: [Embed] }), 2000)
+      })
     }
   }
 }

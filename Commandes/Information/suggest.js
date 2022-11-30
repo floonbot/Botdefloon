@@ -21,11 +21,11 @@ module.exports = {
 
   async run(bot, message, args, db) {
 
-    try {
+    db.query(`SELECT * FROM server WHERE guild = '${message.guild.id}'`, async (err, req) => {
 
-      db.query(`SELECT * FROM suggests WHERE guildId = '${message.guild.id}'`, async (err, req) => {
+      try {
 
-        if (req.length < 1 || Boolean(req[0].suggest) === false) return
+        if (req.length < 1 || Boolean(req[0].suggest) === false) { return message.reply({ content: "Veuiller active le setcommande sur on pour la commande suggest !!", ephemeral: true }) }
 
         let channel = bot.channels.cache.get(req[0].suggest)
         if (!channel) { return message.reply({ content: "Pas de salon pour la suggestion fait un /setsuggest !! ", ephemeral: true }) };
@@ -49,23 +49,11 @@ module.exports = {
           message.react("✅")
           message.react("❌")
         });
-      })
+      } catch (err) {
 
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS LA COMMANDE SUGGEST !!
+        message.reply({ content: "Le serveur n'est pas encore enregistrer, veuillez écrire un message !!", ephemeral: true })
 
-      >--------------- L'ERREUR ----------------<
-
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️ UNE ERREUR DANS LA COMMANDE SUGGEST !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
-    }
+      }
+    })
   }
 }

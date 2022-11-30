@@ -1,7 +1,5 @@
 const Discord = require("discord.js");
 const axios = require('axios');
-const fs = require("fs");
-
 
 module.exports = {
 
@@ -51,22 +49,9 @@ module.exports = {
       })
 
     } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS LA COMMANDE ADD-EMOJI !!
-
-      >--------------- L'ERREUR ----------------<
-
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️ UNE ERREUR DANS LA COMMANDE ADD-EMOJI !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
 
       message.reply({ content: `Je ne peux pas copie l'emoji`, ephemeral: true })
+
     }
   }
 }

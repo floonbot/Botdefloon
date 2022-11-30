@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const fs = require("fs");
 const { TextInputStyle } = require("discord.js");
 
 module.exports = {
@@ -63,55 +62,36 @@ module.exports = {
 
     try {
 
-      try {
+      let reponse = await message.awaitModalSubmit({ time: 300000 })
 
-        let reponse = await message.awaitModalSubmit({ time: 300000 })
+      let titre = reponse.fields.getTextInputValue('titre')
+      let description = reponse.fields.getTextInputValue('description')
+      let couleur = reponse.fields.getTextInputValue('couleur')
+      let footer = reponse.fields.getTextInputValue('footer')
+      let timestamp = reponse.fields.getTextInputValue('timestamp')
 
-        let titre = reponse.fields.getTextInputValue('titre')
-        let description = reponse.fields.getTextInputValue('description')
-        let couleur = reponse.fields.getTextInputValue('couleur')
-        let footer = reponse.fields.getTextInputValue('footer')
-        let timestamp = reponse.fields.getTextInputValue('timestamp')
+      const EmbedBuilder = new Discord.EmbedBuilder()
+        .setColor('#3dffcc')
+        .setDescription(`✅ Votre embed à été envoyer avec succès !`)
 
-        const EmbedBuilder = new Discord.EmbedBuilder()
-          .setColor('#3dffcc')
-          .setDescription(`✅ Votre embed à été envoyer avec succès !`)
+      if (!couleur) couleur = '#000001'
+      if (!footer) footer = ' '
+      if (!titre) titre = ' '
+      if (!description) description = ' '
 
-        if (!couleur) couleur = '#000001'
-        if (!footer) footer = ' '
-        if (!titre) titre = ' '
-        if (!description) description = ' '
+      let EmbedBuilder1 = new Discord.EmbedBuilder()
+        .setColor(`${couleur}`)
+        .setTitle(`${titre}`)
+        .setDescription(`${description}`)
+        .setFooter({ text: `${footer}` })
 
-        let EmbedBuilder1 = new Discord.EmbedBuilder()
-          .setColor(`${couleur}`)
-          .setTitle(`${titre}`)
-          .setDescription(`${description}`)
-          .setFooter({ text: `${footer}` })
+      if (reponse.fields.getTextInputValue('timestamp') === 'oui') EmbedBuilder1.setTimestamp()
+      if (!reponse.fields.getTextInputValue('timestamp') === 'oui') return;
 
-        if (reponse.fields.getTextInputValue('timestamp') === 'oui') EmbedBuilder1.setTimestamp()
-        if (!reponse.fields.getTextInputValue('timestamp') === 'oui') return;
+      await message.channel.send({ embeds: [EmbedBuilder1] })
 
-        await message.channel.send({ embeds: [EmbedBuilder1] })
+      await reponse.reply({ embeds: [EmbedBuilder], ephemeral: true })
 
-        await reponse.reply({ embeds: [EmbedBuilder], ephemeral: true })
-
-      } catch (err) { return; }
-
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS LA COMMANDE EMBED-BUILDER !!
-
-      >--------------- L'ERREUR ----------------<
-
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️ UNE ERREUR DANS LA COMMANDE EMBED-BUILDER !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
-    }
+    } catch (err) { return; }
   }
 }

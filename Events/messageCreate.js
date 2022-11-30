@@ -10,136 +10,17 @@ module.exports = async (bot, message) => {
 
   db.query(`SELECT * FROM server WHERE guild = '${message.guild.id}'`, async (err, req) => {
 
-    try {
+    if (req.length < 1) {
 
-      if (req.length < 1) {
-
-        db.query(`INSERT INTO server (guild, captcha, logs, antiraid) VALUES (${message.guild.id}, 'false','false','false')`)
-      }
-
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS L'EVENT MESSAGECREATE, CAPTCHA ET ANTIRAID POUR LES LOGS !!
-
-      >--------------- L'ERREUR ----------------<
-
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️  UNE ERREUR DANS L'EVENT MESSAGECREATE, CAPTCHA ET ANTIRAID POUR LES LOGS !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
+      db.query(`INSERT INTO server (guild, captcha, logs, antiraid, welcome, goodbye, suggest) VALUES (${message.guild.id}, 'false','false','false','false', 'false', 'false')`)
     }
   })
 
   db.query(`SELECT * FROM pub WHERE guild = '${message.guild.id}'`, async (err, req) => {
 
-    try {
+    if (req.length < 1) {
 
-      if (req.length < 1) {
-
-        db.query(`INSERT INTO pub (guild, active) VALUES (${message.guild.id}, 'false')`)
-      }
-
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS L'EVENT MESSAGECREATE PUB !!
-
-      >--------------- L'ERREUR ----------------<
-
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️  UNE ERREUR DANS L'EVENT MESSAGECREATE PUB !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
-    }
-  })  
-
-  db.query(`SELECT * FROM suggests WHERE guildId = '${message.guild.id}'`, async (err, req) => {
-
-    try {
-
-      if (req.length < 1) {
-
-        db.query(`INSERT INTO suggests (guildId, suggest) VALUES (${message.guild.id}, 'false')`)
-      }
-
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS L'EVENT MESSAGECREATE, SUGGEST POUR LES LOGS !!
-  
-      >--------------- L'ERREUR ----------------<
-
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️  UNE ERREUR DANS L'EVENT MESSAGECREATE, SUGGEST POUR LES LOGS !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
-    }
-  })
-
-  db.query(`SELECT * FROM welcomes WHERE guildId = '${message.guild.id}'`, async (err, req) => {
-
-    try {
-
-      if (req.length < 1) {
-
-        db.query(`INSERT INTO welcomes (guildId, welcome) VALUES (${message.guild.id}, 'false')`)
-      }
-
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS L'EVENT MESSAGECREATE, WELCOME POUR LES LOGS !!
-  
-      >--------------- L'ERREUR ----------------<
-  
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️  UNE ERREUR DANS L'EVENT MESSAGECREATE, WELCOME POUR LES LOGS !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
-    }
-  })
-
-  db.query(`SELECT * FROM goodbyes WHERE guildId = '${message.guild.id}'`, async (err, req) => {
-
-    try {
-
-      if (req.length < 1) {
-
-        db.query(`INSERT INTO goodbyes (guildId, goodbye) VALUES (${message.guild.id}, 'false')`)
-      }
-
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS L'EVENT MESSAGECREATE, GOODBYE POUR LES LOGS !!
-  
-      >--------------- L'ERREUR ----------------<
-  
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️  UNE ERREUR DANS L'EVENT MESSAGECREATE, GOODBYE POUR LES LOGS !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
+      db.query(`INSERT INTO pub (guild, active) VALUES (${message.guild.id}, 'false')`)
     }
   })
 
@@ -179,45 +60,23 @@ module.exports = async (bot, message) => {
     }
   })
 
-  
+  if (message.content.includes("https://") || message.content.includes("discord.gg") || message.content.includes("http://")) {
 
-  //Antilien
-  try {
+    if (message.member.permissions.has(PermissionsBitField.resolve("ManageChannels"))) {
+      return
 
-    if (message.content.includes("https://") || message.content.includes("discord.gg") || message.content.includes("http://")) {
+    } else {
 
-      if (message.member.permissions.has(PermissionsBitField.resolve("ManageChannels"))) {
-        return
-
-      } else {
-
-        await message.delete();
-        try { await message.member.send({ content: `Le lien/mot ${message.content} est interdits dans le serveur ${message.guild.name}, sauf si tu as la permissions ManageChannels` }) } catch (err) { }
-        return await message.channel.send({ content: `${message.author}, Vous n'avez pas le droit de posté ce genre de lien !! Sauf si vous avez la permission MenageChannels` }).then((msg) => {
-          setTimeout(() => msg.delete(), 10000)
+      await message.delete();
+      try { await message.member.send({ content: `Le lien/mot ${message.content} est interdits dans le serveur ${message.guild.name}, sauf si tu as la permissions ManageChannels` }) } catch (err) { }
+      return await message.channel.send({ content: `${message.author}, Vous n'avez pas le droit de posté ce genre de lien !! Sauf si vous avez la permission MenageChannels` }).then((msg) => {
+        setTimeout(() => msg.delete(), 10000)
 
         console.log(`${message.content}`)
-        })
-      }
-
-    } else if ((!message.content.includes("https://") || !message.content.includes("discord.gg") || !message.content.includes("http://"))) {
-      return
+      })
     }
 
-  } catch (err) {
-    console.log(`
-    >------------ OUPS UNE ERREUR ------------<
-    
-    UNE ERREUR DANS L'EVENT ANTI-LIEN !!
-
-    >--------------- L'ERREUR ----------------<
-
-    ${err}
-    
-    >-----------------------------------------<
-    `)
-    fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-    let channel = await bot.channels.cache.get("1041816985920610354")
-    channel.send({ content: `⚠️  UNE ERREUR DANS L'EVENT ANTI-LIEN !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
+  } else if ((!message.content.includes("https://") || !message.content.includes("discord.gg") || !message.content.includes("http://"))) {
+    return
   }
 }

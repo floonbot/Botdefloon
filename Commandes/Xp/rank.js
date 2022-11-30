@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 const Canvas = require("discord-canvas-easy");
-const fs = require("fs");
 
 module.exports = {
 
@@ -26,8 +25,6 @@ module.exports = {
       user = args.getUser("utilisateur")
       if (!user || !message.guild.members.cache.get(user?.id)) return message.reply({ content: "Pas de membre !!", ephemeral: true })
     } else user = message.user;
-
-    try {
 
       db.query(`SELECT * FROM xp WHERE guildId = '${message.guildId}' AND userId = '${user.id}'`, async (err, req) => {
 
@@ -66,22 +63,5 @@ module.exports = {
           await message.editReply({ files: [new Discord.AttachmentBuilder(Card.toBuffer(), { name: "rank.png" })] })
         })
       })
-
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS LA COMMANDE RANK !!
-
-      >--------------- L'ERREUR ----------------<
-
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️ UNE ERREUR DANS LA COMMANDE RANK !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
-    }
   }
 }

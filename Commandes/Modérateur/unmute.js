@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const fs = require("fs");
 const { serveurE, muteE, modoE, userE, textE } = require("../.././json/emoji.json");
 
 module.exports = {
@@ -40,68 +39,50 @@ module.exports = {
 
     try {
 
-      try {
-
-        let unMuteEmbed = new Discord.EmbedBuilder()
-          .setColor("#FF0000")
-          .setTitle(`Unmute par ${message.user.tag}`)
-          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-          .setDescription(`${muteE} **__Unmute__**
+      let unMuteEmbed = new Discord.EmbedBuilder()
+        .setColor("#FF0000")
+        .setTitle(`Unmute par ${message.user.tag}`)
+        .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+        .setDescription(`${muteE} **__Unmute__**
                 
                 > ${serveurE} **Serveur :**\`${message.guild.name}\`
                 > ${modoE} **Modérateur :**\`${message.user.tag}\`\n 
                 > ${textE} **Raison :** \`${reason}\``)
-          .setTimestamp()
-          .setFooter({ text: "Unmute" })
-        await user.send({ embeds: [unMuteEmbed] })
+        .setTimestamp()
+        .setFooter({ text: "Unmute" })
+      await user.send({ embeds: [unMuteEmbed] })
 
-      } catch (err) { return }
+    } catch (err) { return }
 
-      await message.deferReply()
+    await message.deferReply()
 
-      let Embed = new Discord.EmbedBuilder()
-        .setColor("#FF5D00")
-        .setTitle(`Chargement de la commande unmute !!`)
-        .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-        .setDescription(`${muteE}**__Je suis entrain de unmute le membre__**${muteE}
+    let Embed = new Discord.EmbedBuilder()
+      .setColor("#FF5D00")
+      .setTitle(`Chargement de la commande unmute !!`)
+      .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+      .setDescription(`${muteE}**__Je suis entrain de unmute le membre__**${muteE}
 
             > **Sur le serveur :** ${message.guild.name}, 
             
             \`veuillez patienter\`.`)
-        .setTimestamp()
-        .setFooter({ text: "unmute" })
-      await message.followUp({ embeds: [Embed] }).then(() => {
+      .setTimestamp()
+      .setFooter({ text: "unmute" })
+    await message.followUp({ embeds: [Embed] }).then(() => {
 
-        let unMuteEmbed = new Discord.EmbedBuilder()
-          .setColor("#FF0000")
-          .setTitle(`Le membre a étais Unmute`)
-          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-          .setDescription(`${muteE} **__Unmute__** 
+      let unMuteEmbed = new Discord.EmbedBuilder()
+        .setColor("#FF0000")
+        .setTitle(`Le membre a étais Unmute`)
+        .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+        .setDescription(`${muteE} **__Unmute__** 
 
             > ${modoE} **Modérateur :**\`${message.user.tag}\`
             > ${userE} **Membre :** \`${user.tag}\` 
             > ${textE} **Raison :** \`${reason}\``)
-          .setTimestamp()
-          .setFooter({ text: "Unmute" })
-        setTimeout(async () => await message.editReply({ embeds: [unMuteEmbed] }), 2000)
-      })
-      await member.timeout(null, reason)
+        .setTimestamp()
+        .setFooter({ text: "Unmute" })
+      setTimeout(async () => await message.editReply({ embeds: [unMuteEmbed] }), 2000)
+    })
+    await member.timeout(null, reason)
 
-    } catch (err) {
-      console.log(`
-      >------------ OUPS UNE ERREUR ------------<
-      
-      UNE ERREUR DANS LA COMMANDE UNMUTE !!
-
-      >--------------- L'ERREUR ----------------<
-
-      ${err}
-      
-      >-----------------------------------------<
-      `)
-      fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-      let channel = await bot.channels.cache.get("1041816985920610354")
-      channel.send({ content: `⚠️ UNE ERREUR DANS LA COMMANDE UNMUTE !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
-    }
   }
 }

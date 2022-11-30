@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const fs = require("fs");
 const { modoE, serveurE, userE, warnE } = require("../.././json/emoji.json");
 
 module.exports = {
@@ -16,13 +15,13 @@ module.exports = {
     required: true,
     autocomplete: false
   },
-    {
-      type: "string",
-      name: "unwarn",
-      description: "Quel est l'id du warn ?",
-      required: true,
-      autocomplete: false
-    },
+  {
+    type: "string",
+    name: "unwarn",
+    description: "Quel est l'id du warn ?",
+    required: true,
+    autocomplete: false
+  },
   ],
 
   async run(bot, message, args, db) {
@@ -41,69 +40,50 @@ module.exports = {
 
       try {
 
-        try {
-
-          let unwarnEmbed = new Discord.EmbedBuilder()
-            .setColor("#FF0000")
-            .setTitle(`Unwarn par ${message.user.tag}`)
-            .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-            .setDescription(`${warnE} **__UnWarn__**
+        let unwarnEmbed = new Discord.EmbedBuilder()
+          .setColor("#FF0000")
+          .setTitle(`Unwarn par ${message.user.tag}`)
+          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+          .setDescription(`${warnE} **__UnWarn__**
                 
                 > ${serveurE} **Serveur :** \`${message.guild.name}\`
                 > ${modoE} **Modérateur :** \`${message.user.tag}\`!`)
-            .setTimestamp()
-            .setFooter({ text: "Unwarn" })
+          .setTimestamp()
+          .setFooter({ text: "Unwarn" })
 
-          await user.send({ embeds: [unwarnEmbed] })
+        await user.send({ embeds: [unwarnEmbed] })
 
-        } catch (err) { return }
+      } catch (err) { return }
 
-        await message.deferReply()
+      await message.deferReply()
 
-        let Embed = new Discord.EmbedBuilder()
-          .setColor("#FF5D00")
-          .setTitle(`Chargement de la commande unwarn !!`)
-          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-          .setDescription(`${warnE}**__Je unwarn le membre__**${warnE}
+      let Embed = new Discord.EmbedBuilder()
+        .setColor("#FF5D00")
+        .setTitle(`Chargement de la commande unwarn !!`)
+        .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+        .setDescription(`${warnE}**__Je unwarn le membre__**${warnE}
 
                 > **Sur le serveur :** ${message.guild.name}, 
                 
                 \`veuillez patienter\`.`)
-          .setTimestamp()
-          .setFooter({ text: "unwarn" })
-        await message.followUp({ embeds: [Embed] }).then(() => {
+        .setTimestamp()
+        .setFooter({ text: "unwarn" })
+      await message.followUp({ embeds: [Embed] }).then(() => {
 
-          let unwarnEmbed = new Discord.EmbedBuilder()
-            .setColor("#FF0000")
-            .setTitle(`le membre a étais unwarn.`)
-            .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-            .setDescription(`${warnE} **__UnWarn__** \
+        let unwarnEmbed = new Discord.EmbedBuilder()
+          .setColor("#FF0000")
+          .setTitle(`le membre a étais unwarn.`)
+          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+          .setDescription(`${warnE} **__UnWarn__** \
             
             > ${modoE} **Modérateur :** \`${message.user.tag}\`
             > ${userE} **Membre :** \`${user.tag}\`!`)
-            .setTimestamp()
-            .setFooter({ text: "Unwarn" })
-          setTimeout(async () => await message.editReply({ embeds: [unwarnEmbed] }), 2000)
-        })
+          .setTimestamp()
+          .setFooter({ text: "Unwarn" })
+        setTimeout(async () => await message.editReply({ embeds: [unwarnEmbed] }), 2000)
+      })
 
-        db.query(`DELETE FROM warns WHERE guildId = '${message.guildId}' AND warn = '${warns}'`)
-
-      } catch (err) {
-        console.log(`
-        >------------ OUPS UNE ERREUR ------------<
-        
-        UNE ERREUR DANS LA COMMANDE UNWARN !!
-  
-        >--------------- L'ERREUR ----------------<
-  
-        ${err}
-        
-        >-----------------------------------------<
-        `)
-        fs.writeFile("./erreur.txt", `${err.stack}`, () => { return })
-        let channel = await bot.channels.cache.get("1041816985920610354")
-        channel.send({ content: `⚠️ UNE ERREUR DANS LA COMMANDE UNWARN !!`, files: [{ attachment: './erreur.txt', name: 'erreur.txt', description: "L'erreur obtenue" }] })
-      }
+      db.query(`DELETE FROM warns WHERE guildId = '${message.guildId}' AND warn = '${warns}'`)
     })
   }
 }
