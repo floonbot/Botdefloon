@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const fs = require("fs");
 const { PermissionsBitField } = require("discord.js");
 
 module.exports = async (bot, message) => {
@@ -8,19 +7,11 @@ module.exports = async (bot, message) => {
 
   if (message.author.bot || message.channel.type === Discord.ChannelType.DM) return;
 
-  db.query(`SELECT * FROM server WHERE guild = '${message.guild.id}'`, async (err, req) => {
+  db.query(`SELECT * FROM server WHERE guildId = '${message.guild.id}'`, async (err, req) => {
 
     if (req.length < 1) {
 
-      db.query(`INSERT INTO server (guild, captcha, logs, antiraid, welcome, goodbye, suggest) VALUES (${message.guild.id}, 'false','false','false','false', 'false', 'false')`)
-    }
-  })
-
-  db.query(`SELECT * FROM pub WHERE guild = '${message.guild.id}'`, async (err, req) => {
-
-    if (req.length < 1) {
-
-      db.query(`INSERT INTO pub (guild, active) VALUES (${message.guild.id}, 'false')`)
+      db.query(`INSERT INTO server (guildId, guild, captcha, logs, antiraid, welcome, goodbye, suggest, pub) VALUES (${message.guild.id} , '${message.guild.name}', 'false','false','false','false', 'false', 'false', 'false', 'false')`)
     }
   })
 
@@ -60,7 +51,7 @@ module.exports = async (bot, message) => {
     }
   })
 
-  if (message.content.includes("https://") || message.content.includes("discord.gg") || message.content.includes("http://")) {
+  if (message.content.includes("https://") || message.content.includes("discord.gg") || message.content.includes("http://")  ) {
 
     if (message.member.permissions.has(PermissionsBitField.resolve("ManageChannels"))) {
       return
@@ -69,14 +60,14 @@ module.exports = async (bot, message) => {
 
       await message.delete();
       try { await message.member.send({ content: `Le lien/mot ${message.content} est interdits dans le serveur ${message.guild.name}, sauf si tu as la permissions ManageChannels` }) } catch (err) { }
-      return await message.channel.send({ content: `${message.author}, Vous n'avez pas le droit de posté ce genre de lien !! Sauf si vous avez la permission MenageChannels` }).then((msg) => {
+      return await message.channel.send({ content: `${message.author}, Vous n'avez pas le droit de posté ce genre de lien/mot !! Sauf si vous avez la permission MenageChannels` }).then((msg) => {
         setTimeout(() => msg.delete(), 10000)
 
         console.log(`${message.content}`)
       })
     }
 
-  } else if ((!message.content.includes("https://") || !message.content.includes("discord.gg") || !message.content.includes("http://"))) {
+  } else if ((!message.content.includes("https://") || !message.content.includes("discord.gg") || !message.content.includes("http://") )) {
     return
   }
 }

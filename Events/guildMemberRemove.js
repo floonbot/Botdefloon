@@ -6,7 +6,7 @@ module.exports = async (bot, member) => {
 
   let db = bot.db;
 
-  db.query(`SELECT * FROM server WHERE guild = '${member.guild.id}'`, async (err, req) => {
+  db.query(`SELECT * FROM server WHERE guildId = '${member.guild.id}'`, async (err, req) => {
 
     if (req.length < 1 || Boolean(req[0].goodbye) === false) return;
 

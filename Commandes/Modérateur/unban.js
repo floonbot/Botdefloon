@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { serveurE, modoE, textE, userE, banE } = require("../.././json/emoji.json")
+const { serveurE, modoE, textE, userE, banE } = require("../.././json/emoji.json");
 
 module.exports = {
 

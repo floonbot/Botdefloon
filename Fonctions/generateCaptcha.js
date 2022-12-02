@@ -12,7 +12,7 @@ module.exports = async (message) => {
 
   const canvas = Canvas.createCanvas(300, 150)
   const ctx = canvas.getContext("2d")
-  const background = await Canvas.loadImage("./y006i80.png")
+  const background = await Canvas.loadImage("./assets/background/welcome.png")
 
   ctx.font = '35px "Arial"'
   ctx.fillStyle = "#ffffff"

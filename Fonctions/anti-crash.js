@@ -1,5 +1,6 @@
 module.exports = async () => {
-    process.on('uncaughtException', (error, origin) => {
+
+    process.on('uncaughtException',async (error, origin) => {
         console.log('----- Uncaught exception -----');
         console.log(error);
         console.log('----- Exception origin -----');
@@ -13,12 +14,13 @@ module.exports = async () => {
         console.log(reason);
     });
 
-    process.on('warning', (name, message, stack) => {
+    process.on('warning',async (name, message, stack) => {
         console.log('----- Warning -----');
         console.log(name);
         console.log('----- Message -----');
         console.log(message);
         console.log('----- Stack -----');
         console.log(stack);
-    });
+        });
+    
 };

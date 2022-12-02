@@ -5,7 +5,7 @@ module.exports = async (bot, message) => {
 
   let db = bot.db;
 
-  db.query(`SELECT logs FROM server WHERE guild = '${message.guildId}'`, async (err, req) => {
+  db.query(`SELECT logs FROM server WHERE guildId = '${message.guildId}'`, async (err, req) => {
 
     if (message.author.bot) return;
     if (req[0].logs === "false") return;

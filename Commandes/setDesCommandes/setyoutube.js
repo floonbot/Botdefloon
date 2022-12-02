@@ -78,7 +78,7 @@ module.exports = {
     }
 
     if (etat === "off") {
-      db.query(`UPDATE pub SET active = 'false' WHERE guild = '${message.guildId}'`)
+      db.query(`UPDATE server SET pub = 'false' WHERE guildId = '${message.guildId}'`)
 
       return await message.followUp({ embeds: [cEmbed] }).then(() => {
 
@@ -94,8 +94,8 @@ module.exports = {
 
     } else if (etat === "on") {
 
-      db.query(`UPDATE pub SET active = 'true' WHERE guild = '${message.guildId}'`)
-      db.query(`UPDATE pub SET youtube = '${youtube}' WHERE guild = '${message.guildId}'`)
+      db.query(`UPDATE server SET pub = 'true' WHERE guildId = '${message.guildId}'`)
+      db.query(`UPDATE server SET lienYoutube = '${youtube}' WHERE guildId = '${message.guildId}'`)
 
       return await message.followUp({ embeds: [cEmbed] }).then(() => {
 

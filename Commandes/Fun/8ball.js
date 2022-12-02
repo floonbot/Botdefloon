@@ -1,4 +1,4 @@
-const { huitball, vraisfaux, } = require("../.././json/emoji.json");
+const { huitball, vraisfaux, } = require("../../json/emoji.json");
 const { EmbedBuilder } = require("discord.js");
 
 module.exports = {

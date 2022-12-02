@@ -11,17 +11,17 @@ module.exports = {
 
     let db = bot.db;
 
-    db.query(`SELECT * FROM pub WHERE guild = '${message.guildId}'`, async (err, req) => {
+    db.query(`SELECT * FROM server WHERE guildId = '${message.guildId}'`, async (err, req) => {
 
       try {
 
-        if (req[0].active === "false") { message.reply({ content: "Veuiller active le setyoutube sur on !!", ephemeral: true }) }
+        if (req[0].pub === "false") { message.reply({ content: "Veuiller active le setyoutube sur on !!", ephemeral: true }) }
 
         else {
 
           await message.deferReply()
 
-          message.followUp(`${req[0].youtube}`)
+          message.followUp(`${req[0].lienYoutube}`)
         }
       } catch (err) {
 

@@ -6,7 +6,6 @@ const loadCommands = require("./Loaders/loadCommands")
 const loadEvents = require("./Loaders/loadEvents")
 require(`./Fonctions/anti-crash.js`)();
 
-
 bot.commands = new Discord.Collection()
 bot.fonction = {
   createId: require("./Fonctions/createId"),

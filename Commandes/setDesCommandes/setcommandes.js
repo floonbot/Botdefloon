@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const fs = require("fs");
 const choix = ["\`welcome\`", " \`goodbye\`", " \`captcha\`", " \`logs\`", " \`suggest\`", " \`antiraid\`"];
 const { infoE, logE } = require("../.././json/emoji.json");
 
@@ -77,7 +76,7 @@ module.exports = {
 
     if (commande === "antiraid") {
       if (etat === "off") {
-        db.query(`UPDATE server SET antiraid = 'false' WHERE guild = '${message.guildId}'`)
+        db.query(`UPDATE server SET antiraid = 'false' WHERE guildId = '${message.guildId}'`)
 
         return await message.followUp({ embeds: [cEmbed] }).then(() => {
 
@@ -93,7 +92,7 @@ module.exports = {
 
       } else {
 
-        db.query(`UPDATE server SET antiraid = 'true' WHERE guild = '${message.guildId}'`)
+        db.query(`UPDATE server SET antiraid = 'true' WHERE guildId = '${message.guildId}'`)
 
         return await message.followUp({ embeds: [cEmbed] }).then(() => {
 
@@ -111,7 +110,7 @@ module.exports = {
 
     if (commande === "captcha") {
       if (etat === "off") {
-        db.query(`UPDATE server SET captcha = 'false' WHERE guild = '${message.guildId}'`)
+        db.query(`UPDATE server SET captcha = 'false' WHERE guildId = '${message.guildId}'`)
 
         return await message.followUp({ embeds: [cEmbed] }).then(() => {
 
@@ -132,7 +131,7 @@ module.exports = {
         channel = message.guild.channels.cache.get(channel.id)
         if (!channel) return message.followUp("Pas de salon trouvée !!")
 
-        db.query(`UPDATE server SET captcha = '${channel.id}' WHERE guild = '${message.guildId}'`)
+        db.query(`UPDATE server SET captcha = '${channel.id}' WHERE guildId = '${message.guildId}'`)
 
         return await message.followUp({ embeds: [cEmbed] }).then(() => {
 
@@ -151,7 +150,7 @@ module.exports = {
     if (commande === "goodbye") {
 
       if (etat === "off") {
-        db.query(`UPDATE server SET goodbye = 'false' WHERE guild = '${message.guildId}'`)
+        db.query(`UPDATE server SET goodbye = 'false' WHERE guildId = '${message.guildId}'`)
 
         return await message.followUp({ embeds: [cEmbed] }).then(() => {
 
@@ -172,7 +171,7 @@ module.exports = {
         channel = message.guild.channels.cache.get(channel.id)
         if (!channel) return message.followUp("Pas de salon trouvée")
 
-        db.query(`UPDATE server SET goodbye = '${channel.id}' WHERE guild = '${message.guildId}'`)
+        db.query(`UPDATE server SET goodbye = '${channel.id}' WHERE guildId = '${message.guildId}'`)
 
         return await message.followUp({ embeds: [cEmbed] }).then(() => {
 
@@ -193,7 +192,7 @@ module.exports = {
 
       if (etat === "off") {
 
-        db.query(`UPDATE server SET logs = 'false' WHERE guild = '${message.guildId}'`)
+        db.query(`UPDATE server SET logs = 'false' WHERE guildId = '${message.guildId}'`)
 
         return await message.followUp({ embeds: [cEmbed] }).then(() => {
 
@@ -214,7 +213,7 @@ module.exports = {
         channel = message.guild.channels.cache.get(channel.id)
         if (!channel) return message.followUp("Pas de salon trouvé !")
 
-        db.query(`UPDATE server SET logs = '${channel.id}' WHERE guild = '${message.guildId}'`)
+        db.query(`UPDATE server SET logs = '${channel.id}' WHERE guildId = '${message.guildId}'`)
 
         return await message.followUp({ embeds: [cEmbed] }).then(() => {
 
@@ -232,7 +231,7 @@ module.exports = {
 
     if (commande === "suggest") {
       if (etat === "off") {
-        db.query(`UPDATE server SET suggest = 'false' WHERE guild = '${message.guildId}'`)
+        db.query(`UPDATE server SET suggest = 'false' WHERE guildId = '${message.guildId}'`)
 
         return await message.followUp({ embeds: [cEmbed] }).then(() => {
 
@@ -253,7 +252,7 @@ module.exports = {
         channel = message.guild.channels.cache.get(channel.id)
         if (!channel) return message.followUp("Pas de salon trouvée")
 
-        db.query(`UPDATE server SET suggest = '${channel.id}' WHERE guild = '${message.guildId}'`)
+        db.query(`UPDATE server SET suggest = ${channel.id} WHERE guildId = '${message.guildId}'`)
 
         return await message.followUp({ embeds: [cEmbed] }).then(() => {
 
@@ -272,7 +271,7 @@ module.exports = {
     if (commande === "welcome") {
 
       if (etat === "off") {
-        db.query(`UPDATE server SET welcome = 'false' WHERE guild = '${message.guildId}'`)
+        db.query(`UPDATE server SET welcome = 'false' WHERE guildId = '${message.guildId}'`)
 
         return await message.followUp({ embeds: [cEmbed] }).then(() => {
 
@@ -293,7 +292,7 @@ module.exports = {
         channel = message.guild.channels.cache.get(channel.id)
         if (!channel) return message.followUp("Pas de salon trouvée")
 
-        db.query(`UPDATE server SET welcome = '${channel.id}' WHERE guild = '${message.guildId}'`)
+        db.query(`UPDATE server SET welcome = '${channel.id}' WHERE guildId = '${message.guildId}'`)
 
         return await message.followUp({ embeds: [cEmbed] }).then(() => {
 

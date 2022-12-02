@@ -21,7 +21,7 @@ module.exports = {
 
   async run(bot, message, args, db) {
 
-    db.query(`SELECT * FROM server WHERE guild = '${message.guild.id}'`, async (err, req) => {
+    db.query(`SELECT * FROM server WHERE guildId = '${message.guild.id}'`, async (err, req) => {
 
       try {
 
