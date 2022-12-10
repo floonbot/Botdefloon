@@ -23,7 +23,7 @@ module.exports = {
       autocomplete: false
     }
   ],
-  async run(bot, message, args, db) {
+  async run(bot, message, args, db, member) {
 
     let user = await bot.users.fetch(args._hoistedOptions[0].value)
     if (!user) return message.reply({ content: "Pas de membre à bannir !!", ephemeral: true })

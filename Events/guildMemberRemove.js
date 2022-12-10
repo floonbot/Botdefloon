@@ -9,18 +9,20 @@ module.exports = async (bot, member) => {
   db.query(`SELECT * FROM server WHERE guildId = '${member.guild.id}'`, async (err, req) => {
 
     if (req.length < 1 || Boolean(req[0].goodbye) === false) return;
+    db.query(`SELECT * FROM serverchannel WHERE guildId = '${member.guild.id}'`, async (err, req) => {
 
-    let channel = bot.channels.cache.get(req[0].goodbye)
-    if (!channel) return;
+      let channel = bot.channels.cache.get(req[0].goodbyeS)
+      if (!channel) return;
 
-    const Goodbye = await new Canvasez.Home()
-      .setBackground("./assets/background/goodbye.png")
-      .setGuild(member.guild)
-      .setUser(member.user)
-      .setColorFont("#4B006E")
-      .setText(`a quitté le serveur ${member.guild.name}`)
-      .toHome()
+      const Goodbye = await new Canvasez.Home()
+        .setBackground("./assets/background/goodbye.png")
+        .setGuild(member.guild)
+        .setUser(member.user)
+        .setColorFont("#4B006E")
+        .setText(`a quitté le serveur ${member.guild.name}`)
+        .toHome()
 
-    await channel.send({ files: [new Discord.AttachmentBuilder(Goodbye.toBuffer(), { name: "goodbye.png" })] })
+      await channel.send({ files: [new Discord.AttachmentBuilder(Goodbye.toBuffer(), { name: "goodbye.png" })] })
+    })
   })
 }

@@ -25,7 +25,7 @@ module.exports = {
   ],
   async run(bot, message) {
 
-    try {
+  
 
       let emoji = message.options.getString("emoji")?.trim();
       let name = message.options.getString("nom");
@@ -48,11 +48,7 @@ module.exports = {
 
       })
 
-    } catch (err) {
-
-      message.reply({ content: `Je ne peux pas copie l'emoji`, ephemeral: true })
-
-    }
+   
   }
 }
 

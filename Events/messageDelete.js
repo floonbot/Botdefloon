@@ -11,28 +11,31 @@ module.exports = async (bot, message) => {
     if (req[0].logs === "false") return;
     else {
 
-      let channel = message.guild.channels.cache.get(req[0].logs);
-      if (!channel) return;
+      db.query(`SELECT * FROM serverchannel WHERE guildId = '${message.guild.id}'`, async (err, req) => {
+        let channel = message.guild.channels.cache.get(req[0].logsS);
+        if (!channel) return;
 
-      const AuditsLogs = await message.guild.fetchAuditLogs({
-        type: Discord.AuditLogEvent.MessageDelete,
-        limit: 1
-      })
+        const AuditsLogs = await message.guild.fetchAuditLogs({
+          type: Discord.AuditLogEvent.MessageDelete,
+          limit: 1
+        })
 
-      const LatestMessageDeleted = AuditsLogs.entries.first();
+        const LatestMessageDeleted = AuditsLogs.entries.first();
 
-      let Embed = new Discord.EmbedBuilder()
-        .setColor("#FFD6EF")
-        .setTitle("Message supprimé")
-        .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
-        .setDescription(`
+        let Embed = new Discord.EmbedBuilder()
+          .setColor("#FFD6EF")
+          .setTitle("Message supprimé")
+          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true }))
+          .setDescription(`
 					
 					> **Auteur :** ${LatestMessageDeleted.executor.tag}
 			    	> **Date :**   <t:${Math.floor(message.createdAt / 1000)}:F>
 					> **Contenu :** \`\`\`${message.content}\`\`\``)
-        .setFooter({ text: "MessageDelete" })
-        .setTimestamp()
-      channel.send({ embeds: [Embed] });
+          .setFooter({ text: "MessageDelete" })
+          .setTimestamp()
+        channel.send({ embeds: [Embed] });
+      }
+      )
     }
   })
 }

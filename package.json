@@ -3,6 +3,8 @@
     "@iamtraction/google-translate": "^2.0.1",
     "axios": "^1.2.0",
     "canvas": "^2.10.2",
+    "clashofclans.js": "^1.5.5",
+    "colors": "^1.4.0",
     "discord-canvas-easy": "^3.2.0",
     "discord.js": "^14.7.1",
     "figlet": "^1.5.2",

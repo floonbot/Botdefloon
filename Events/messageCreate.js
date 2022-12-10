@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const { PermissionsBitField } = require("discord.js");
+const { language} = require(".././json/Motban.json")
 
 module.exports = async (bot, message) => {
 
@@ -11,7 +12,19 @@ module.exports = async (bot, message) => {
 
     if (req.length < 1) {
 
-      db.query(`INSERT INTO server (guildId, guild, captcha, logs, antiraid, welcome, goodbye, suggest, pub) VALUES (${message.guild.id} , '${message.guild.name}', 'false','false','false','false', 'false', 'false', 'false', 'false')`)
+      db.query(`INSERT INTO server (guildId, guild, captcha, logs, antiraid, welcome, goodbye, suggest, pub, antispam) VALUES (${message.guild.id}, '${message.guild.name}' ,'false','false','false', 'false', 'false', 'false', 'false', 'false')`)
+    }
+
+
+    if (req[0].antispam === "true") await bot.fonction.searchSpam(message)
+
+  })
+
+  db.query(`SELECT * FROM serverchannel WHERE guildId = '${message.guild.id}'`, async (err, req) => {
+
+    if (req.length < 1) {
+
+      db.query(`INSERT INTO serverchannel (guildId, guild, welcomeS, goodbyeS, logsS, captchaS, suggestS) VALUES (${message.guild.id}, '${message.guild.name}' ,'false','false','false','false','false')`)
     }
   })
 
@@ -51,7 +64,8 @@ module.exports = async (bot, message) => {
     }
   })
 
-  if (message.content.includes("https://") || message.content.includes("discord.gg") || message.content.includes("http://")  ) {
+
+  if (message.content.includes("https://") || message.content.includes("discord.gg") || message.content.includes("http://") || message.content.includes(language) ) {
 
     if (message.member.permissions.has(PermissionsBitField.resolve("ManageChannels"))) {
       return
@@ -67,7 +81,8 @@ module.exports = async (bot, message) => {
       })
     }
 
-  } else if ((!message.content.includes("https://") || !message.content.includes("discord.gg") || !message.content.includes("http://") )) {
+  } else if ((!message.content.includes("https://") || !message.content.includes("discord.gg") || !message.content.includes("http://"))) {
     return
   }
+
 }

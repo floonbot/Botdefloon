@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { roleE } = require("../.././json/emoji.json");
 
 module.exports = {
@@ -55,7 +55,7 @@ module.exports = {
                 ${roled.members.map(m => `>  ${roled} : \`${m.user.username}\``).join("\n") || "Aucun utilisateur"}`)
           .setFooter({ text: "role-member-list" })
           .setTimestamp()
-        setTimeout(async () => await message.editReply({ embeds: [roleEmbed] }), 1000)
+        setTimeout(async () => await message.editReply({ embeds: [roleEmbed], components: [row]  }), 1000)
       })
   }
 }

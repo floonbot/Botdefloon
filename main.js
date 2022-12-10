@@ -10,9 +10,10 @@ bot.commands = new Discord.Collection()
 bot.fonction = {
   createId: require("./Fonctions/createId"),
   generateCaptcha: require("./Fonctions/generateCaptcha"),
+  searchSpam: require("./Fonctions/searchSpam")
 }
 
 //create un fichier config.js avec le token du bot. Dans le fichier mettre module.exports = { TOKEN: "Id du token" })
 bot.login(config.TOKEN)
 loadCommands(bot)
- loadEvents(bot)
+loadEvents(bot)

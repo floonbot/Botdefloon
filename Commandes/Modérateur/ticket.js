@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder } = require("discord.js")
+const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require("discord.js")
 
 module.exports = {
 
@@ -20,7 +20,7 @@ module.exports = {
 
     const RowTicket = new ActionRowBuilder()
       .addComponents(
-        new SelectMenuBuilder()
+        new StringSelectMenuBuilder()
           .setCustomId('menuticket')
           .setPlaceholder('✅ |CHOIX  !!')
           .addOptions(

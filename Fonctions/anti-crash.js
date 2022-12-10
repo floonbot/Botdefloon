@@ -1,26 +1,28 @@
+var colors = require('colors');
+
 module.exports = async () => {
 
     process.on('uncaughtException',async (error, origin) => {
-        console.log('----- Uncaught exception -----');
-        console.log(error);
-        console.log('----- Exception origin -----');
-        console.log(origin);
+        console.log(colors.magenta('----- Uncaught exception -----'));
+        console.log(colors.brightGreen.bold(error));
+        console.log(colors.magenta('----- Exception origin -----'));
+        console.log(colors.gBrightYellow.bold(origin));
     });
 
     process.on('unhandledRejection', (reason, promise) => {
-        console.log('----- Unhandled Rejection at -----');
-        console.log(promise);
-        console.log('----- Reason -----');
-        console.log(reason);
+        console.log(colors.magenta('----- Unhandled Rejection at -----'));
+        console.log(colors.brightBlue.bold(promise));
+        console.log(colors.magenta('----- Reason -----'));
+        console.log(colors.brightRed.bold(reason));
     });
 
     process.on('warning',async (name, message, stack) => {
-        console.log('----- Warning -----');
-        console.log(name);
-        console.log('----- Message -----');
-        console.log(message);
-        console.log('----- Stack -----');
-        console.log(stack);
+        console.log(colors.magenta('----- Warning -----'));
+        console.log(colors.brightCyan.bold(name));
+        console.log(colors.magenta('----- Message -----'));
+        console.log(colors.brightWhite.bold(message));
+        console.log(colors.magenta('----- Stack -----'));
+        console.log(colors.grey.bold(stack));
         });
     
 };

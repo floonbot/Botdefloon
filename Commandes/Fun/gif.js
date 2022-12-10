@@ -1,7 +1,11 @@
 const Discord = require("discord.js");
 const { AttachmentBuilder } = require("discord.js");
 const { gifE } = require("../../json/emoji.json");
-const { punch, kiss, badass, kill, autres } = require("../../json/saveImage/gif.json");
+const { punch } = require("../.././json/GIF_D'ANIME/punch.json")
+const { kiss } = require("../.././json/GIF_D'ANIME/kiss.json")
+const { badass } = require("../.././json/GIF_D'ANIME/badass.json")
+const { kill } = require("../.././json/GIF_D'ANIME/kill.json")
+const { autres } = require("../.././json/GIF_D'ANIME/autres.json")
 
 module.exports = {
 

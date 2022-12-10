@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const moment = require("moment");
 require("moment-duration-format");
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, SelectMenuBuilder } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, StringSelectMenuBuilder } = require("discord.js");
 const { pingE, TimeE, infoE, Emojibot } = require("../json/emoji.json");
 
 
@@ -31,7 +31,7 @@ module.exports = async (bot, interaction) => {
       const focusedOption = interaction.options.getFocused(true);
 
       if (focusedOption.name === 'commande') {
-        choices = ['logs', 'antiraid', 'captcha', 'suggest', 'welcome', 'goodbye']
+        choices = ['antispam', 'logs', 'antiraid', 'captcha', 'suggest', 'welcome', 'goodbye']
       }
 
       if (focusedOption.name === 'état') {
@@ -73,13 +73,6 @@ module.exports = async (bot, interaction) => {
     if (interaction.commandName === "gif") {
 
       let choices = ["kill", "kiss", "badass", "punch"]
-      let sortie = choices.filter(c => c.includes(entry))
-      await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
-    }
-
-    if (interaction.commandName === "nsfw") {
-
-      let choices = ["pussy", "aHarem", "boobs", "lesbienne"]
       let sortie = choices.filter(c => c.includes(entry))
       await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
     }
@@ -182,6 +175,84 @@ module.exports = async (bot, interaction) => {
     }
   }
 
+  if (interaction.isStringSelectMenu()) {
+
+    if (interaction.customId === 'menuticket') {
+
+      if (interaction.values == 'Questions', 'Plainte', 'Bug') {
+
+        const EmbedTicket1 = new EmbedBuilder()
+          .setColor("#FF0000")
+          .setTitle(`Créer un ticket :   `)
+          .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+          .setDescription(`Pour **Ouvrir** un **Ticket** Séléctionnez la **catégorie** qui vous convient`)
+          .setTimestamp()
+          .setFooter({ text: "Ticket" });
+
+        const RowTicket = new ActionRowBuilder()
+          .addComponents(
+
+            new StringSelectMenuBuilder()
+              .setCustomId('menuticket')
+              .setPlaceholder('Sélectionner le type de ticket que vous voulez !')
+              .addOptions(
+                {
+                  label: `Questions`,
+                  description: `Poser une question de tout type`,
+                  emoji: `❓`,
+                  value: `Questions`,
+                },
+                {
+                  label: `Plainte`,
+                  description: `Faire une plainte envers un staff ou un membre du Discord`,
+                  emoji: `🖋`,
+                  value: `Plainte`,
+                },
+                {
+                  label: `Bug`,
+                  description: `Signaler un bug`,
+                  emoji: `⚠`,
+                  value: `Bug`,
+                },
+              ),
+          );
+        await interaction.deferUpdate();
+        await interaction.editReply({ embeds: [EmbedTicket1], components: [RowTicket] })
+
+        let channel = await interaction.guild.channels.create({
+          name: `${interaction.values}-${interaction.user.username}`,
+          type: ChannelType.GuildText,
+          permissionOverwrites: [
+            {
+              id: interaction.guild.roles.everyone,
+              deny: [Discord.PermissionFlagsBits.ViewChannel],
+            },
+            {
+              id: interaction.user,
+              allow: [Discord.PermissionFlagsBits.SendMessages, Discord.PermissionFlagsBits.ViewChannel],
+            },
+          ],
+        });
+
+        let EmbedCreateChannel = new EmbedBuilder()
+          .setColor("#3dffcc")
+          .setTitle('Ticket ouvert')
+          .setDescription("<@" + interaction.user.id + "> Voici votre ticket.\nExpliquez-nous en détail votre problème !")
+          .setTimestamp()
+          .setFooter({ text: `${bot.user.username}`, iconURL: bot.user.displayAvatarURL({ dynamic: true }) });
+        const Row = new ActionRowBuilder()
+          .addComponents(new ButtonBuilder()
+            .setCustomId('close')
+            .setLabel('Fermer le ticket')
+            .setEmoji('🗑️')
+            .setStyle(ButtonStyle.Danger),
+          );
+
+        await channel.send({ embeds: [EmbedCreateChannel], components: [Row] })
+
+      }
+    }
+  }
 
 }
 
