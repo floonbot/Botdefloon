@@ -49,7 +49,7 @@ module.exports = {
                 > Créer le : ${message.guild.createdAt}
                 > Vérification : \`${message.guild.verificationLevel}\`
                 > Ping : \`${bot.ws.ping}\`
- 
+             
                 ${infoE} **__Information Compte__**
  
                 > Membre Totaux : \`${message.guild.memberCount}\`

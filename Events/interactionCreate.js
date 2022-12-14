@@ -42,6 +42,24 @@ module.exports = async (bot, interaction) => {
       await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
     }
 
+    if (interaction.commandName === "create-perso") {
+
+      let choices;
+
+      const focusedOption = interaction.options.getFocused(true);
+
+      if (focusedOption.name === 'race') {
+        choices = ['elfe', 'humain','nain', 'elfe noir', 'demon']
+      }
+
+      if (focusedOption.name === 'classe') {
+        choices = ['tank', 'mage','paladins', 'mage noir', 'guerrier']
+      }
+
+      let sortie = choices.filter(c => c.includes(entry))
+      await interaction.respond(entry === "" ? sortie.map(c => ({ name: c, value: c })) : sortie.map(c => ({ name: c, value: c })))
+    }
+
     if (interaction.commandName === "traduction") {
 
       let choices;
