@@ -1,52 +1,34 @@
-const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const Discord = require("discord.js");
 const { numStr } = require('../../Fonctions/fonction');
-const { serveurE } = require("../.././json/emoji.json");
 
 module.exports = {
 
-  name: 'serveur-list',
-  description: 'Permet de voit le top5 des serveurs du bot',
-  permission: "Aucune",
-  dm: false,
-  category: "👆🏻Information",
+    name: 'serveur-list',
+    description: 'Permet de voit le top5 des serveurs du bot',
+    permission: "Aucune",
+    dm: false,
+    category: "👆🏻Information",
 
-  async run(bot, message) {
+    async run(bot, message) {
 
-    await message.deferReply()
+        const row = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setLabel("Invite moi")
+                    .setStyle(Discord.ButtonStyle.Link)
+                    .setURL("https://discord.com/api/oauth2/authorize?client_id=1041282190060826635&permissions=8&scope=bot")
+            )
 
-    const row = new ActionRowBuilder()
-      .addComponents(
-        new ButtonBuilder()
-          .setLabel("Invite moi")
-          .setStyle(ButtonStyle.Link)
-          //Mettre le lien de ton bot
-          .setURL("https://discord.com/api/oauth2/authorize?client_id=1041282190060826635&permissions=8&scope=bot")
-      )
+        let n = 0
+        const guild = bot.guilds.cache.sort((a, b) => b.memberCount - a.memberCount).map((guild) => `**${n += 1}) __${guild.name}__ :**\n\`\`\`${numStr(guild.memberCount)} Membres\n\`\`\``).slice(0, 5).join("\n");
 
-    let n = 0
-    const guild = bot.guilds.cache.sort((a, b) => b.memberCount - a.memberCount).map((guild) => `**${n += 1}) __${guild.name}__ :**\n\`\`\`${numStr(guild.memberCount)} Membres\n\`\`\``).slice(0, 5).join("\n");
-
-    let botEmbed = new EmbedBuilder()
-      .setColor("#FF5D00")
-      .setTitle(`Chargement de la commande server-list !!`)
-      .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-      .setDescription(`${serveurE}**__Je cherche les informations sur les serveurs__** ${serveurE}
-
-    > **Sur le serveur :** ${message.guild.name}
-     
-      \`Veuillez patienter\``)
-      .setTimestamp()
-      .setFooter({ text: "server-list" })
-    await message.followUp({ embeds: [botEmbed] }).then(() => {
-
-      const embed = new EmbedBuilder()
-        .setTitle(`TOP 5 DES SERVEURS`)
-        .setDescription(`${guild}`)
-        .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-        .setColor("#0070FF")
-        .setTimestamp()
-        .setFooter({ text: "server-list" })
-      setTimeout(async () => await message.editReply({ embeds: [embed], components: [row] }), 2000)
-    })
-  }
+        const embed = new Discord.EmbedBuilder()
+            .setTitle(`***TOP 5 DES SERVEURS***`)
+            .setDescription(`${guild}`)
+            .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+            .setColor("#0070FF")
+            .setTimestamp()
+            .setFooter({ text: `${message.user.tag}`, iconURL: `${message.user.avatarURL()}` })
+        await message.reply({ embeds: [embed], components: [row] })
+    }
 }

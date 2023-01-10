@@ -1,8 +1,7 @@
-
 module.exports = {
 
   name: "pub",
-  description: "Affiche la chaine youtube",
+  description: "Permet d'envoyer le lien youtube",
   permission: "Aucune",
   dm: false,
   category: "👆🏻Information",
@@ -18,10 +17,7 @@ module.exports = {
         if (req[0].pub === "false") { message.reply({ content: "Veuiller active le setyoutube sur on !!", ephemeral: true }) }
 
         else {
-
-          await message.deferReply()
-
-          message.followUp(`${req[0].lienYoutube}`)
+          message.reply(`${req[0].lienYoutube}`)
         }
       } catch (err) {
 

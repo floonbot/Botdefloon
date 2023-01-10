@@ -1,44 +1,35 @@
-const { Floon, infoE } = require("../.././json/emoji.json");
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");
+const Discord = require("discord.js");
+const { infoE } = require("../.././json/emoji.json");
 
 module.exports = {
 
-  name: "bot-info",
-  description: "Les informations sur le bot",
-  dm: false,
-  category: "👆🏻Information",
+    name: "bot-info",
+    description: "Les informations sur le bot",
+    dm: false,
+    category: "👆🏻Information",
 
-  async run(bot, message) {
+    async run(bot, message) {
 
-    await message.deferReply()
+        const row = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setLabel("Invite moi")
+                    .setStyle(Discord.ButtonStyle.Link)
+                    .setURL("https://discord.com/api/oauth2/authorize?client_id=1041282190060826635&permissions=8&scope=bot")
+            )
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setLabel("Actualiser")
+                    .setStyle(Discord.ButtonStyle.Success)
+                    //Mettre le lien de ton bot
+                    .setCustomId("bot-info")
+            )
 
-    const row = new ActionRowBuilder()
-      .addComponents(
-        new ButtonBuilder()
-          .setLabel("Invite moi")
-          .setStyle(ButtonStyle.Link)
-          //Mettre le lien de ton bot
-          .setURL("https://discord.com/api/oauth2/authorize?client_id=1041282190060826635&permissions=8&scope=bot")
-      )
-
-    let botEmbed = new EmbedBuilder()
-      .setColor("#FF5D00")
-      .setTitle(`Chargement de la commande bot-info !!`)
-      .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-      .setDescription(`${Floon} **__Je cherche les informations sur ${bot.user.tag}__** ${Floon}
-
-            > **Sur le serveur :** ${message.guild.name}
-             
-              \`Veuillez patienter\``)
-      .setTimestamp()
-      .setFooter({ text: "bot-info" })
-    await message.followUp({ embeds: [botEmbed] }).then(() => {
-
-      botEmbed = new EmbedBuilder()
-        .setTitle(`Les informations de ${bot.user.username}`)
-        .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-        .setColor("#0070FF")
-        .setDescription(`
+        const botEmbed = new Discord.EmbedBuilder()
+            .setTitle(`***LES INFORMATIONS DE ${bot.user.username}***`)
+            .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
+            .setColor("#0070FF")
+            .setDescription(`
                 __**${infoE} Informations**__
 
                 > **Développer :** \`Floon\`
@@ -49,9 +40,8 @@ module.exports = {
                
                 __ **${infoE} Information Compte ** __
 
-                > **Créer :** <t:${parseInt(bot.user.createdTimestamp / 1000)}:R>
-               `)
-      setTimeout(() => message.editReply({ embeds: [botEmbed], components: [row] }), 1000)
-    })
-  }
+                > **Créer :** <t:${parseInt(bot.user.createdTimestamp / 1000)}:R>`)
+            .setFooter({ text: `${message.user.tag}`, iconURL: `${message.user.avatarURL()}` })
+        message.reply({ embeds: [botEmbed], components: [row] })
+    }
 }

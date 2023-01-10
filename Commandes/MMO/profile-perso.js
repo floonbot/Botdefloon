@@ -1,6 +1,7 @@
 const Canvas = require('@napi-rs/canvas');
-const { AttachmentBuilder } = require("discord.js")
+const { AttachmentBuilder } = require("discord.js");
 const { request } = require('undici');
+const { dé } = require("../.././json/emoji.json");
 
 module.exports = {
 
@@ -8,7 +9,7 @@ module.exports = {
     description: "Permet de voir les stats de son perso",
     permission: "Aucune",
     dm: false,
-    category: "Jeux de rôle",
+    category: `${dé}Jeux de rôle`,
 
 
     async run(bot, message, args, db) {

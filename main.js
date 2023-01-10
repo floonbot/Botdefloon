@@ -4,16 +4,28 @@ const bot = new Discord.Client({ intents })
 const config = require("./config")
 const loadCommands = require("./Loaders/loadCommands")
 const loadEvents = require("./Loaders/loadEvents")
+const Player = require("discord-player")
 require(`./Fonctions/anti-crash.js`)();
 
 bot.commands = new Discord.Collection()
+bot.player = new Player.Player(bot, {
+  leaveOnEnd: true,
+  leaveOnEmpty: true,
+  initialVolume: 100,
+  ytdlOptions: {
+    quality: "highestaudio",
+    highWaterMark: 1 << 25
+  }
+
+})
+
 bot.fonction = {
   createId: require("./Fonctions/createId"),
   generateCaptcha: require("./Fonctions/generateCaptcha"),
   searchSpam: require("./Fonctions/searchSpam")
 }
 
-//create un fichier config.js avec le token du bot. Dans le fichier mettre module.exports = { TOKEN: "Id du token" })
+
 bot.login(config.TOKEN)
 loadCommands(bot)
 loadEvents(bot)

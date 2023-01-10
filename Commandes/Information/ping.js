@@ -1,50 +1,34 @@
 const Discord = require("discord.js");
 const moment = require("moment");
 require("moment-duration-format");
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { pingE, TimeE } = require("../.././json/emoji.json");
 
 module.exports = {
 
   name: "ping",
-  description: "Donne le ping du bot",
+  description: "Permet de voir le ping",
   permission: "Aucune",
   dm: false,
   category: "👆🏻Information",
 
   async run(bot, message) {
 
-    await message.deferReply()
-
     const ping = Date.now() - message.createdAt;
     const api_ping = bot.ws.ping;
     const uptime = moment.duration(message.client.uptime).format(" D[d], H[h], m[m], s[s]");
 
-    const row = new ActionRowBuilder()
+    const row = new Discord.ActionRowBuilder()
       .addComponents(
-        new ButtonBuilder()
+        new Discord.ButtonBuilder()
           .setLabel("Actualiser")
-          .setStyle(ButtonStyle.Success)
+          .setStyle(Discord.ButtonStyle.Success)
           //Mettre le lien de ton bot
           .setCustomId("Ping")
       )
 
-    let pingEmbed = new Discord.EmbedBuilder()
-      .setColor("#FF5D00")
-      .setTitle(`Chargement de la commande ping !!`)
-      .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
-      .setDescription(`${pingE}**__Je cherche le ping du bot__**${pingE}
-
-                > **Sur le serveur :** ${message.guild.name}, 
-                
-                \`veuillez patienter\`.`)
-      .setTimestamp()
-      .setFooter({ text: "Ping" })
-    await message.followUp({ embeds: [pingEmbed] }).then(() => {
-
-      pingEmbed = new Discord.EmbedBuilder()
+     const pingEmbed = new Discord.EmbedBuilder()
         .setColor("#0070FF")
-        .setTitle(`La lantence du bot`)
+        .setTitle(`LA LATENCE DU BOT`)
         .setThumbnail(bot.user.displayAvatarURL({ dynamic: true, size: 64 }))
         .setDescription(`
                     
@@ -52,8 +36,7 @@ module.exports = {
           > ${pingE} **API :** \`${api_ping}\` ms
           > ${TimeE} **Temps Uptime :** ${uptime}`)
         .setTimestamp()
-        .setFooter({ text: "Ping" })
-      setTimeout(() => message.editReply({ embeds: [pingEmbed], components: [row] }), 1000)
-    })
+        .setFooter({ text: `${message.user.tag}`, iconURL: `${message.user.avatarURL()}` })
+       message.reply({ embeds: [pingEmbed], components: [row] })
   }
 }

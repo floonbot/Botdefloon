@@ -12,7 +12,7 @@ module.exports = async (bot, message) => {
 
     if (req.length < 1) {
 
-      db.query(`INSERT INTO server (guildId, guild, captcha, logs, antiraid, welcome, goodbye, suggest, pub, antispam) VALUES (${message.guild.id}, '${message.guild.name}' ,'false','false','false', 'false', 'false', 'false', 'false', 'false')`)
+      db.query(`INSERT INTO server (guildId, captcha, logs, antiraid, welcome, goodbye, suggest, pub, antispam) VALUES (${message.guild.id} ,'false','false','false', 'false', 'false', 'false', 'false', 'false')`)
     }
 
 
@@ -32,7 +32,7 @@ module.exports = async (bot, message) => {
 
     if (req.length < 1) {
 
-      db.query(`INSERT INTO mmorpg (guildId, guild, userId , name, race, classe, description ) VALUES (${message.guild.id}, '${message.guild.name}', '${message.author.id}' ,'false','false','false','false')`)
+      db.query(`INSERT INTO mmorpg (guildId, userId , name, race, classe, description ) VALUES (${message.guild.id}, '${message.author.id}' ,'false','false','false','false')`)
     }
   })
 
